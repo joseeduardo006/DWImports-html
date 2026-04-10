@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DW Imports - Camisas de Time Originais</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            color: #fff;
+        }
+        .landing-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .landing-page::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .landing-logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .landing-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+        }
+        .landing-title span { color: #888; }
+        .landing-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        .landing-features {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .landing-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .landing-feature i { font-size: 2rem; color: #666; margin-bottom: 0.5rem; }
+        .landing-feature p { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; }
+        .landing-divider {
+            width: 100px; height: 2px;
+            background: linear-gradient(90deg, transparent, #666, transparent);
+            margin: 1.5rem auto;
+        }
+        .landing-description {
+            max-width: 700px;
+            color: #777;
+            font-size: 1rem;
+            line-height: 2;
+            margin-bottom: 2.5rem;
+        }
+        .landing-btn {
+            padding: 1.2rem 3rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .landing-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255,255,255,0.2);
+            background: #ddd;
+        }
+        .landing-badges {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .badge {
+            padding: 0.5rem 1.2rem;
+            border: 1px solid #333;
+            border-radius: 50px;
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: rgba(10,10,10,0.98);
+            box-shadow: 0 2px 20px rgba(255,255,255,0.05);
+            position: fixed;
+            width: 100%; top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo { font-size: 2rem; font-weight: bold; color: #fff; text-decoration: none; }
+        nav ul { display: flex; list-style: none; gap: 1.5rem; }
+        nav a { text-decoration: none; color: #888; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        nav a:hover { color: #fff; }
+        .cart-icon { position: relative; font-size: 1.5rem; color: #888; cursor: pointer; transition: color 0.3s; }
+        .cart-icon:hover { color: #fff; }
+        .cart-count {
+            position: absolute;
+            top: -8px; right: -8px;
+            background: #fff; color: #000;
+            border-radius: 50%;
+            width: 20px; height: 20px;
+            font-size: 0.8rem;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+        }
+        .modal {
+            display: none; position: fixed;
+            z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+        }
+        .modal-content {
+            background-color: #111;
+            margin: 10% auto; padding: 2rem;
+            border-radius: 15px; width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            border: 1px solid #222;
+        }
+        .close { color: #666; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #fff; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #888; }
+        .form-group input {
+            width: 100%; padding: 0.8rem;
+            border: 1px solid #333; border-radius: 8px;
+            font-size: 1rem; background: #1a1a1a; color: #fff;
+        }
+        .form-group input:focus { outline: none; border-color: #666; }
+        .btn {
+            width: 100%; padding: 1rem;
+            background: #fff; color: #000;
+            border: none; border-radius: 8px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .btn:hover { background: #ddd; transform: translateY(-2px); }
+        main { margin-top: 80px; padding-bottom: 2rem; }
+        .hero {
+            text-align: center; padding: 4rem 0;
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            border-radius: 20px; margin-bottom: 3rem;
+            border: 1px solid #222;
+        }
+        .hero h1 { font-size: 3rem; color: #fff; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 5px; }
+        .hero p { font-size: 1.1rem; color: #666; }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem; margin-bottom: 3rem;
+        }
+        .category {
+            background: #111; padding: 2rem;
+            border-radius: 15px; text-align: center;
+            border: 1px solid #222;
+            transition: all 0.3s; cursor: pointer;
+        }
+        .category:hover { border-color: #555; transform: translateY(-5px); background: #1a1a1a; }
+        .category i { font-size: 2.5rem; color: #666; margin-bottom: 1rem; display: block; transition: color 0.3s; }
+        .category:hover i { color: #aaa; }
+        .category h2 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .category p { color: #666; font-size: 0.9rem; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem; margin-bottom: 3rem;
+        }
+        .product-card {
+            background: #111; border-radius: 15px;
+            overflow: hidden; border: 1px solid #222;
+            transition: all 0.3s;
+        }
+        .product-card:hover { transform: translateY(-8px); border-color: #444; }
+        .product-image {
+            width: 100%; height: 280px;
+            background: #1a1a1a;
+            display: flex; align-items: center;
+            justify-content: center; overflow: hidden;
+        }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .product-image img:hover { transform: scale(1.05); }
+        .product-image i { font-size: 4rem; color: #444; }
+        .product-info { padding: 1.5rem; }
+        .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .product-price { font-size: 1.4rem; font-weight: bold; color: #aaa; margin-bottom: 1rem; }
+        .cart-modal .modal-content { max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .cart-item {
+            display: flex; gap: 1rem;
+            padding: 1rem 0; border-bottom: 1px solid #222;
+            align-items: center;
+        }
+        .cart-item-emoji { font-size: 2.5rem; }
+        .cart-item-info { flex: 1; color: #aaa; }
+        .quantity-controls { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+        .quantity-btn {
+            width: 30px; height: 30px;
+            border: 1px solid #333; background: #1a1a1a;
+            color: #fff; border-radius: 50%;
+            cursor: pointer; font-size: 1rem;
+        }
+        .quantity-btn:hover { border-color: #666; }
+        .total { font-size: 1.5rem; font-weight: bold; text-align: right; margin: 1.5rem 0; color: #fff; }
+        .payment-form { display: none; margin-top: 1rem; }
+        .payment-methods { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .payment-method {
+            flex: 1; padding: 1rem;
+            border: 1px solid #333; border-radius: 10px;
+            text-align: center; cursor: pointer;
+            transition: all 0.3s; background: #1a1a1a; color: #888;
+        }
+        .payment-method.active { border-color: #fff; background: #222; color: #fff; }
+        .payment-method i { font-size: 1.8rem; color: #666; display: block; margin-bottom: 0.5rem; }
+        .payment-method.active i { color: #fff; }
+        .section-title {
+            text-align: center; font-size: 2rem;
+            margin-bottom: 2rem; color: #fff;
+            text-transform: uppercase; letter-spacing: 5px;
+        }
+        .back-btn {
+            display: inline-block; margin-bottom: 1.5rem;
+            padding: 0.6rem 1.5rem;
+            background: transparent; color: #888;
+            border: 1px solid #333; border-radius: 25px;
+            cursor: pointer; font-size: 0.9rem;
+            transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .back-btn:hover { border-color: #666; color: #fff; }
+        .hidden { display: none !important; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .whatsapp-btn {
+            width: 100%; padding: 1rem;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white; border: none; border-radius: 8px;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            transition: all 0.3s; margin-top: 0.5rem;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(37,211,102,0.3); }
+        @media (max-width: 768px) {
+            .landing-title { font-size: 2.5rem; }
+            .landing-features { gap: 1.5rem; }
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 2rem; }
+            .categories { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body> 
+<!-- LANDING PAGE -->
+<div id="landingPage" class="landing-page">
+    <div class="landing-logo">⚽</div>
+    <h1 class="landing-title">DW <span>Imports</span></h1>
+    <p class="landing-subtitle">A sua loja número 1 em camisas de time originais e de primeira linha!</p>
+    
+    <div class="landing-features">
+        <div class="landing-feature">
+            <i class="fas fa-star"></i>
+            <p>Primeira Linha</p>
+        </div>
+        <div class="landing-feature">
+            <i class="fas fa-shield-alt"></i>
+            <p>Qualidade Garantida</p>
+        </div>
+        <div class="landing-feature">
+            <i class="fas fa-truck"></i>
+            <p>Entrega Rápida</p>
+        </div>
+        <div class="landing-feature">
+            <i class="fas fa-heart"></i>
+            <p>Feito com Paixão</p>
+        </div>
+    </div>
+
+    <div class="landing-divider"></div>
+
+    <p class="landing-description">
+        Bem-vindo à <strong style="color:#fff;">DW Imports</strong>, a loja especializada em camisas 
+        de time de alta qualidade! Trabalhamos com os melhores times do mundo, 
+        desde os gigantes europeus até os grandes clubes brasileiros. 
+        Nossas camisas são todas de <strong style="color:#fff;">primeira linha</strong>, 
+        com tecido premium, acabamento impecável e muito estilo. 
+        Aqui você encontra sua camisa favorita com o melhor preço e entrega rápida para todo o Brasil! 🇧🇷
+    </p>
+
+    <button class="landing-btn" onclick="entrarCatalogo()">
+        <i class="fas fa-futbol"></i> Ver Catálogo
+    </button>
+
+    <div class="landing-badges">
+        <span class="badge">⚽ Futebol</span>
+        <span class="badge">🏀 NBA</span>
+        <span class="badge">🌍 Seleções</span>
+        <span class="badge">👕 Retrô</span>
+        <span class="badge">🏆 Europeu</span>
+        <span class="badge">🇧🇷 Brasileiro</span>
+    </div>
+</div>
+
+<!-- CATALOGO -->
+<div id="catalogo" class="hidden">
+<header>
+    <div class="container">
+        <div class="header-content">
+            <a href="#" class="logo" onclick="showSection('home')">⚽ DW Imports</a>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('home')">Início</a></li>
+                    <li><a href="#" onclick="showSection('europeu')">Europa</a></li>
+                    <li><a href="#" onclick="showSection('brasileiro')">Brasil</a></li>
+                    <li><a href="#" onclick="showSection('retro')">Retrô</a></li>
+                    <li><a href="#" onclick="showSection('nba')">NBA</a></li>
+                    <li><a href="#" onclick="showSection('selecoes')">Seleções</a></li>
+                </ul>
+            </nav>
+            <div class="user-info" id="userInfo">
+                <i class="fas fa-user-circle" onclick="toggleLogin()" style="font-size: 2rem; cursor: pointer; color: #888;"></i>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="toggleLogin()">&times;</span>
+        <h2 style="margin-bottom:1.5rem; color:#fff;">🔐 Login</h2>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+        <button class="btn" onclick="doLogin()">Entrar</button>
+    </div>
+</div>
+
+<div id="cartModal" class="modal cart-modal">
+    <div class="modal-content">
+        <span class="close" onclick="toggleCart()">&times;</span>
+        <h2 style="margin-bottom:1.5rem; color:#fff;">🛒 Meu Carrinho</h2>
+        <div id="cartItems"></div>
+        <div class="total" id="cartTotal">Total: R$ 0,00</div>
+        <button class="btn" onclick="showPayment()">Finalizar Compra</button>
+        <div class="payment-form" id="paymentForm">
+            <h3 style="margin: 1rem 0; color:#888;">Forma de Pagamento</h3>
+            <div class="payment-methods">
+                <div class="payment-method active" onclick="selectPayment(this, 'Cartão')">
+                    <i class="fas fa-credit-card"></i>
+                    <p>Cartão</p>
+                </div>
+                <div class="payment-method" onclick="selectPayment(this, 'Boleto')">
+                    <i class="fas fa-barcode"></i>
+                    <p>Boleto</p>
+                </div>
+                <div class="payment-method" onclick="selectPayment(this, 'PIX')">
+                    <i class="fas fa-qrcode"></i>
+                    <p>PIX</p>
+                </div>
+            </div>
+            <button class="whatsapp-btn" onclick="finalizarCompra()">
+                <i class="fab fa-whatsapp"></i> Confirmar Pedido via WhatsApp
+            </button>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="container">
+        <section id="home">
+            <div class="hero">
+                <h1>⚽ DW Imports</h1>
+                <p>Melhores camisas de time do mundo com entrega rápida!</p>
+            </div>
+            <div class="categories">
+                <div class="category" onclick="showSection('europeu')">
+                    <i class="fas fa-futbol"></i>
+                    <h2>Times Europeus</h2>
+                    <p>R$ 150,00</p>
+                </div>
+                <div class="category" onclick="showSection('brasileiro')">
+                    <i class="fas fa-futbol"></i>
+                    <h2>Times Brasileiros</h2>
+                    <p>R$ 150,00</p>
+                </div>
+                <div class="category" onclick="showSection('retro')">
+                    <i class="fas fa-tshirt"></i>
+                    <h2>Camisas Retrô</h2>
+                    <p>R$ 170,00</p>
+                </div>
+                <div class="category" onclick="showSection('nba')">
+                    <i class="fas fa-basketball-ball"></i>
+                    <h2>Camisas NBA</h2>
+                    <p>R$ 160,00</p>
+                </div>
+                <div class="category" onclick="showSection('selecoes')">
+                    <i class="fas fa-globe-americas"></i>
+                    <h2>Seleções</h2>
+                    <p>R$ 150,00</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="europeu" class="hidden">
+            <button class="back-btn" onclick="showSection('home')">← Voltar</button>
+            <h2 class="section-title">🏆 Times Europeus</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Real Madrid 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Real Madrid 2024', 150, '🏆')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Barcelona 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Barcelona 2024', 150, '🔵')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Bayern Munich 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Bayern Munich 2024', 150, '🔴')">🛒 Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="brasileiro" class="hidden">
+            <button class="back-btn" onclick="showSection('home')">← Voltar</button>
+            <h2 class="section-title">🇧🇷 Times Brasileiros</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Flamengo 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Flamengo 2024', 150, '🔴⚫')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Palmeiras 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Palmeiras 2024', 150, '🟢')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-futbol"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Corinthians 2024</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Corinthians 2024', 150, '⚫')">🛒 Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="retro" class="hidden">
+            <button class="back-btn" onclick="showSection('home')">← Voltar</button>
+            <h2 class="section-title">👕 Camisas Retrô</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-tshirt"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Brasil 1994</div>
+                        <div class="product-price">R$ 170,00</div>
+                        <button class="btn" onclick="addToCart('Brasil 1994', 170, '🇧🇷')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-tshirt"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Argentina 1986</div>
+                        <div class="product-price">R$ 170,00</div>
+                        <button class="btn" onclick="addToCart('Argentina 1986', 170, '🇦🇷')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-tshirt"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Italia 1990</div>
+                        <div class="product-price">R$ 170,00</div>
+                        <button class="btn" onclick="addToCart('Italia 1990', 170, '🇮🇹')">🛒 Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="nba" class="hidden">
+            <button class="back-btn" onclick="showSection('home')">← Voltar</button>
+            <h2 class="section-title">🏀 Camisas NBA</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-basketball-ball"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Lakers - LeBron James</div>
+                        <div class="product-price">R$ 160,00</div>
+                        <button class="btn" onclick="addToCart('Lakers LeBron', 160, '🏀')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-basketball-ball"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Bulls - Michael Jordan</div>
+                        <div class="product-price">R$ 160,00</div>
+                        <button class="btn" onclick="addToCart('Bulls Jordan', 160, '🏀')">🛒 Adicionar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-basketball-ball"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Warriors - Curry</div>
+                        <div class="product-price">R$ 160,00</div>
+                        <button class="btn" onclick="addToCart('Warriors Curry', 160, '🏀')">🛒 Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="selecoes" class="hidden">
+            <button class="back-btn" onclick="showSection('home')">← Voltar</button>
+            <h2 class="section-title">🌍 Seleções</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://i.ibb.co/S4Q52D3z/1773694018cb88356da69cbe365044c50e00f3a3cc-thumbnail-900x.jpg" 
+                             alt="Camisa do Brasil Amarela 2026"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='🇧🇷';">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">Camisa do Brasil Amarela 2026</div>
+                        <div class="product-price">R$ 150,00</div>
+                        <button class="btn" onclick="addToCart('Camisa do Brasil Amarela 2026', 150, '🇧🇷')">🛒 Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+</div>
+
+<script>
+    let cart = [];
+    let selectedPayment = 'Cartão';
+
+    function entrarCatalogo() {
+        document.getElementById('landingPage').classList.add('hidden');
+        document.getElementById('catalogo').classList.remove('hidden');
+        window.scrollTo(0, 0);
+    }
+
+    function showSection(section) {
+        document.getElementById('home').classList.add('hidden');
+        const sections = ['europeu', 'brasileiro', 'retro', 'nba', 'selecoes'];
+        sections.forEach(s => {
+            document.getElementById(s).classList.add('hidden');
+        });
+        if(section === 'home') {
+            document.getElementById('home').classList.remove('hidden');
+        } else {
+            document.getElementById(section).classList.remove('hidden');
+        }
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('cartModal').style.display = 'none';
+        window.scrollTo(0, 0);
+    }
+
+    function toggleLogin() {
+        const modal = document.getElementById('loginModal');
+        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleCart() {
+        const modal = document.getElementById('cartModal');
+        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        renderCart();
+    }
+
+    function doLogin() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        if(email && password) {
+            alert('✅ Login realizado com sucesso! Bem-vindo!');
+            document.getElementById('loginModal').style.display = 'none';
+        } else {
+            alert('❌ Preencha email e senha!');
+        }
+    }
+
+    function addToCart(name, price, emoji) {
+        const existing = cart.find(item => item.name === name);
+        if(existing) {
+            existing.quantity++;
+        } else {
+            cart.push({ name, price, emoji, quantity: 1 });
+        }
+        updateCartCount();
+        alert(`✅ ${name} adicionado ao carrinho!`);
+    }
+
+    function updateCartCount() {
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').textContent = total;
+    }
+
+    function renderCart() {
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        if(cart.length === 0) {
+            cartItems.innerHTML = '<p style="text-align:center; color:#666; padding: 2rem;">🛒 Carrinho vazio!</p>';
+            cartTotal.textContent = 'Total: R$ 0,00';
+            return;
+        }
+        cartItems.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <div class="cart-item-emoji">${item.emoji}</div>
+                <div class="cart-item-info">
+                    <strong style="color:#fff;">${item.name}</strong><br>
+                    <span style="color:#aaa;">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+                        <span style="color:#fff;">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                        <button class="quantity-btn" onclick="removeItem(${index})" 
+                            style="background:#333; color:white; margin-left:0.5rem;">🗑</button>
+                    </div>
+                </div>
+                <strong style="color:#fff;">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</strong>
+            </div>
+        `).join('');
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cartTotal.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function changeQuantity(index, change) {
+        cart[index].quantity += change;
+        if(cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+        }
+        updateCartCount();
+        renderCart();
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        updateCartCount();
+        renderCart();
+    }
+
+    function showPayment() {
+        if(cart.length === 0) {
+            alert('❌ Seu carrinho está vazio!');
+            return;
+        }
+        document.getElementById('paymentForm').style.display = 'block';
+    }
+
+    function selectPayment(element, method) {
+        document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+        element.classList.add('active');
+        selectedPayment = method;
+    }
+
+    function finalizarCompra() {
+        if(cart.length === 0) {
+            alert('❌ Seu carrinho está vazio!');
+            return;
+        }
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        let mensagem = '🛒 *Novo Pedido - DW Imports*\n\n';
+        mensagem += '*Itens do Pedido:*\n';
+        cart.forEach(item => {
+            mensagem += `${item.emoji} ${item.name}\n`;
+            mensagem += `   Quantidade: ${item.quantity}\n`;
+            mensagem += `   Valor: R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
+        });
+        mensagem += `*Forma de Pagamento:* ${selectedPayment}\n`;
+        mensagem += `*Total: R$ ${total.toFixed(2).replace('.', ',')}*\n\n`;
+        mensagem += '📦 Aguardo confirmação do pedido!';
+
+        const numeroWhatsApp = '5521979669281';
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+        window.open(urlWhatsApp, '_blank');
+
+        cart = [];
+        updateCartCount();
+        document.getElementById('cartModal').style.display = 'none';
+        document.getElementById('paymentForm').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if(event.target === document.getElementById('loginModal')) {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        if(event.target === document.getElementById('cartModal')) {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

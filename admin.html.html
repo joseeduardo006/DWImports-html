@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DW Imports - Painel ADM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* LOGIN ADM */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        .login-box {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .login-logo {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .login-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #666;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        .login-btn:hover {
+            background: #ddd;
+            transform: translateY(-2px);
+        }
+        .error-msg {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* PAINEL ADM */
+        .adm-panel { display: none; }
+        .adm-header {
+            background: #111;
+            border-bottom: 1px solid #222;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .adm-header-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .adm-header-title span { color: #666; }
+        .logout-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover { border-color: #666; color: #fff; }
+        .adm-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .adm-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-card i {
+            font-size: 2rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            border-bottom: 1px solid #222;
+            padding-bottom: 1rem;
+        }
+        .add-product-form {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 0.9rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .form-group select:focus { outline: none; border-color: #666; }
+        .tamanhos-group {
+            margin-bottom: 1.5rem;
+        }
+        .tamanhos-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tamanhos-checkboxes {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tamanho-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .tamanho-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #fff;
+        }
+        .tamanho-check span {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .add-btn {
+            padding: 1rem 2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        .add-btn:hover { background: #ddd; transform: translateY(-2px); }
+        .products-table {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            padding: 1rem 1.5rem;
+            background: #1a1a1a;
+            border-bottom: 1px solid #222;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #1a1a1a;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .table-row:hover { background: #1a1a1a; }
+        .table-row:last-child { border-bottom: none; }
+        .product-name { font-weight: 600; color: #fff; }
+        .product-category {
+            color: #888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .product-price { color: #aaa; }
+        .product-stock { color: #aaa; }
+        .product-sizes {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .action-btns { display: flex; gap: 0.5rem; }
+        .edit-btn {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .edit-btn:hover { border-color: #fff; color: #fff; }
+        .delete-btn {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .delete-btn:hover { background: #ff4444; color: #fff; }
+        .empty-msg {
+            text-align: center;
+            color: #666;
+            padding: 3rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .success-msg {
+            background: #1a2a1a;
+            border: 1px solid #2a4a2a;
+            color: #4CAF50;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+        /* MODAL EDITAR */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+        }
+        .modal-content {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 15px;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        .close-modal {
+            float: right;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .close-modal:hover { color: #fff; }
+        .save-btn {
+            padding: 1rem 2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .save-btn:hover { background: #ddd; }
+        @media (max-width: 768px) {
+            .table-header { display: none; }
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+            .adm-content { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login-page">
+    <div class="login-box">
+        <div class="login-logo">⚽</div>
+        <h1 class="login-title">DW Imports</h1>
+        <p class="login-subtitle">Painel Administrativo</p>
+        <div class="form-group">
+            <label>Usuário</label>
+            <input type="text" id="admUser" placeholder="Digite seu usuário">
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="admPass" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="fazerLogin()">
+            <i class="fas fa-lock"></i> Entrar
+        </button>
+        <p class="error-msg" id="errorMsg">❌ Usuário ou senha incorretos!</p>
+    </div>
+</div>
+
+<!-- PAINEL ADM -->
+<div id="admPanel" class="adm-panel">
+    <div class="adm-header">
+        <div class="adm-header-title">DW <span>Imports</span> | ADM</div>
+        <button class="logout-btn" onclick="fazerLogout()">
+            <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+    </div>
+
+    <div class="adm-content" style="margin-top: 100px;">
+
+        <!-- STATS -->
+        <div class="adm-stats">
+            <div class="stat-card">
+                <i class="fas fa-box"></i>
+                <div class="stat-number" id="totalProdutos">0</div>
+                <div class="stat-label">Produtos</div>
+                        </div>
+            <div class="stat-card">
+                <i class="fas fa-tags"></i>
+                <div class="stat-number" id="totalCategorias">0</div>
+                <div class="stat-label">Categorias</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-warehouse"></i>
+                <div class="stat-number" id="totalEstoque">0</div>
+                <div class="stat-label">Itens em Estoque</div>
+            </div>
+        </div>
+
+        <!-- ADICIONAR PRODUTO -->
+        <div class="add-product-form">
+            <h2 class="section-title">➕ Adicionar Novo Produto</h2>
+            <div class="success-msg" id="successMsg">✅ Produto adicionado com sucesso!</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="prodNome" placeholder="Ex: Flamengo 2024">
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="prodCategoria">
+                        <option value="europeu">Times Europeus</option>
+                        <option value="brasileiro">Times Brasileiros</option>
+                        <option value="retro">Camisas Retrô</option>
+                        <option value="nba">NBA</option>
+                        <option value="selecoes">Seleções</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preço (R$)</label>
+                    <input type="number" id="prodPreco" placeholder="Ex: 150">
+                </div>
+                <div class="form-group">
+                    <label>Estoque</label>
+                    <input type="number" id="prodEstoque" placeholder="Ex: 10">
+                </div>
+                <div class="form-group">
+                    <label>Emoji do Produto</label>
+                    <input type="text" id="prodEmoji" placeholder="Ex: 🔴⚫">
+                </div>
+                <div class="form-group">
+                    <label>URL da Imagem (opcional)</label>
+                    <input type="text" id="prodImagem" placeholder="https://...">
+                </div>
+            </div>
+            <div class="tamanhos-group">
+                <label>Tamanhos Disponíveis</label>
+                <div class="tamanhos-checkboxes">
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="PP"> <span>PP</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="P"> <span>P</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="M"> <span>M</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="G"> <span>G</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="GG"> <span>GG</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="XG"> <span>XG</span>
+                    </label>
+                    <label class="tamanho-check">
+                        <input type="checkbox" value="XXG"> <span>XXG</span>
+                    </label>
+                </div>
+            </div>
+            <button class="add-btn" onclick="adicionarProduto()">
+                <i class="fas fa-plus"></i> Adicionar Produto
+            </button>
+        </div>
+
+        <!-- LISTA DE PRODUTOS -->
+        <h2 class="section-title">📦 Produtos Cadastrados</h2>
+        <div class="products-table">
+            <div class="table-header">
+                <div>Produto</div>
+                <div>Categoria</div>
+                <div>Preço</div>
+                <div>Estoque</div>
+                <div>Tamanhos</div>
+                <div>Ações</div>
+            </div>
+            <div id="productsList">
+                <div class="empty-msg">Nenhum produto cadastrado ainda!</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="fecharModal()">&times;</span>
+        <h2 class="modal-title">✏️ Editar Produto</h2>
+        <input type="hidden" id="editIndex">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" id="editNome">
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                <select id="editCategoria">
+                    <option value="europeu">Times Europeus</option>
+                    <option value="brasileiro">Times Brasileiros</option>
+                    <option value="retro">Camisas Retrô</option>
+                    <option value="nba">NBA</option>
+                    <option value="selecoes">Seleções</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preço (R$)</label>
+                <input type="number" id="editPreco">
+            </div>
+            <div class="form-group">
+                <label>Estoque</label>
+                <input type="number" id="editEstoque">
+            </div>
+            <div class="form-group">
+                <label>Emoji</label>
+                <input type="text" id="editEmoji">
+            </div>
+            <div class="form-group">
+                <label>URL da Imagem</label>
+                <input type="text" id="editImagem">
+            </div>
+        </div>
+        <div class="tamanhos-group">
+            <label>Tamanhos Disponíveis</label>
+            <div class="tamanhos-checkboxes" id="editTamanhos">
+                <label class="tamanho-check">
+                    <input type="checkbox" value="PP"> <span>PP</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="P"> <span>P</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="M"> <span>M</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="G"> <span>G</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="GG"> <span>GG</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="XG"> <span>XG</span>
+                </label>
+                <label class="tamanho-check">
+                    <input type="checkbox" value="XXG"> <span>XXG</span>
+                </label>
+            </div>
+        </div>
+        <button class="save-btn" onclick="salvarEdicao()">
+            <i class="fas fa-save"></i> Salvar Alterações
+        </button>
+    </div>
+</div>
+
+<script>
+    const ADMIN_USER = 'admin1512';
+    const ADMIN_PASS = '151298Dudu';
+    let produtos = JSON.parse(localStorage.getItem('dwImportsProdutos')) || [];
+
+    function fazerLogin() {
+        const user = document.getElementById('admUser').value;
+        const pass = document.getElementById('admPass').value;
+        if(user === ADMIN_USER && pass === ADMIN_PASS) {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('admPanel').style.display = 'block';
+            atualizarStats();
+            renderProdutos();
+        } else {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+    }
+
+    function fazerLogout() {
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('admPanel').style.display = 'none';
+        document.getElementById('admUser').value = '';
+        document.getElementById('admPass').value = '';
+        document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    function adicionarProduto() {
+        const nome = document.getElementById('prodNome').value;
+        const categoria = document.getElementById('prodCategoria').value;
+        const preco = document.getElementById('prodPreco').value;
+        const estoque = document.getElementById('prodEstoque').value;
+        const emoji = document.getElementById('prodEmoji').value || '👕';
+        const imagem = document.getElementById('prodImagem').value;
+
+        if(!nome || !preco || !estoque) {
+            alert('❌ Preencha pelo menos Nome, Preço e Estoque!');
+            return;
+        }
+
+        const tamanhosSelecionados = [];
+        document.querySelectorAll('.tamanhos-checkboxes input[type="checkbox"]:checked').forEach(cb => {
+            tamanhosSelecionados.push(cb.value);
+        });
+
+        if(tamanhosSelecionados.length === 0) {
+            alert('❌ Selecione pelo menos um tamanho!');
+            return;
+        }
+
+        const produto = {
+            id: Date.now(),
+            nome,
+            categoria,
+            preco: parseFloat(preco),
+            estoque: parseInt(estoque),
+            emoji,
+            imagem,
+            tamanhos: tamanhosSelecionados
+        };
+
+        produtos.push(produto);
+        salvarProdutos();
+        renderProdutos();
+        atualizarStats();
+        limparFormulario();
+
+        const msg = document.getElementById('successMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+    }
+
+    function limparFormulario() {
+        document.getElementById('prodNome').value = '';
+        document.getElementById('prodPreco').value = '';
+        document.getElementById('prodEstoque').value = '';
+        document.getElementById('prodEmoji').value = '';
+        document.getElementById('prodImagem').value = '';
+        document.querySelectorAll('.tamanhos-checkboxes input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+        });
+    }
+
+    function salvarProdutos() {
+        localStorage.setItem('dwImportsProdutos', JSON.stringify(produtos));
+    }
+
+    function renderProdutos() {
+        const lista = document.getElementById('productsList');
+        if(produtos.length === 0) {
+            lista.innerHTML = '<div class="empty-msg">Nenhum produto cadastrado ainda!</div>';
+            return;
+        }
+
+        const categorias = {
+            'europeu': 'Times Europeus',
+            'brasileiro': 'Times Brasileiros',
+            'retro': 'Camisas Retrô',
+            'nba': 'NBA',
+            'selecoes': 'Seleções'
+        };
+
+        lista.innerHTML = produtos.map((p, index) => `
+            <div class="table-row">
+                <div class="product-name">${p.emoji} ${p.nome}</div>
+                <div class="product-category">${categorias[p.categoria]}</div>
+                <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                <div class="product-stock">
+                    <span style="color: ${p.estoque > 5 ? '#4CAF50' : p.estoque > 0 ? '#FFC107' : '#ff4444'}">
+                        ${p.estoque} un.
+                    </span>
+                </div>
+                <div class="product-sizes">${p.tamanhos.join(', ')}</div>
+                <div class="action-btns">
+                    <button class="edit-btn" onclick="abrirEdicao(${index})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-btn" onclick="deletarProduto(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function atualizarStats() {
+        document.getElementById('totalProdutos').textContent = produtos.length;
+        const cats = new Set(produtos.map(p => p.categoria));
+        document.getElementById('totalCategorias').textContent = cats.size;
+        const estoque = produtos.reduce((sum, p) => sum + p.estoque, 0);
+        document.getElementById('totalEstoque').textContent = estoque;
+    }
+
+    function deletarProduto(index) {
+        if(confirm('⚠️ Tem certeza que deseja deletar este produto?')) {
+            produtos.splice(index, 1);
+            salvarProdutos();
+            renderProdutos();
+            atualizarStats();
+        }
+    }
+
+    function abrirEdicao(index) {
+        const p = produtos[index];
+        document.getElementById('editIndex').value = index;
+        document.getElementById('editNome').value = p.nome;
+        document.getElementById('editCategoria').value = p.categoria;
+        document.getElementById('editPreco').value = p.preco;
+        document.getElementById('editEstoque').value = p.estoque;
+        document.getElementById('editEmoji').value = p.emoji;
+        document.getElementById('editImagem').value = p.imagem || '';
+
+        document.querySelectorAll('#editTamanhos input[type="checkbox"]').forEach(cb => {
+            cb.checked = p.tamanhos.includes(cb.value);
+        });
+
+        document.getElementById('editModal').style.display = 'block';
+    }
+
+    function fecharModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    function salvarEdicao() {
+        const index = document.getElementById('editIndex').value;
+        const tamanhosSelecionados = [];
+        document.querySelectorAll('#editTamanhos input[type="checkbox"]:checked').forEach(cb => {
+            tamanhosSelecionados.push(cb.value);
+        });
+
+        if(tamanhosSelecionados.length === 0) {
+            alert('❌ Selecione pelo menos um tamanho!');
+            return;
+        }
+
+        produtos[index] = {
+            ...produtos[index],
+            nome: document.getElementById('editNome').value,
+            categoria: document.getElementById('editCategoria').value,
+            preco: parseFloat(document.getElementById('editPreco').value),
+            estoque: parseInt(document.getElementById('editEstoque').value),
+            emoji: document.getElementById('editEmoji').value,
+            imagem: document.getElementById('editImagem').value,
+            tamanhos: tamanhosSelecionados
+        };
+
+        salvarProdutos();
+        renderProdutos();
+        atualizarStats();
+        fecharModal();
+        alert('✅ Produto atualizado com sucesso!');
+    }
+
+    document.getElementById('admUser').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') fazerLogin();
+    });
+      document.getElementById('admPass').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') fazerLogin();
+    });
+    window.onclick = function(event) {
+        if(event.target === document.getElementById('editModal')) {
+            fecharModal();
+        }
+    }
+</script>
+
+</body>
+</html>
