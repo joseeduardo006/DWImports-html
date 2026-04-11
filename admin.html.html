@@ -7,245 +7,88 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            min-height: 100vh;
-            color: #fff;
-        }
-        .login-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-        }
-        .login-box {
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 3rem;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
+        body { font-family: 'Arial', sans-serif; background: #0a0a0a; min-height: 100vh; color: #fff; }
+        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); }
+        .login-box { background: #111; border: 1px solid #222; border-radius: 20px; padding: 3rem; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .login-logo { text-align: center; font-size: 3rem; margin-bottom: 0.5rem; }
-        .login-title {
-            text-align: center; font-size: 1.5rem;
-            font-weight: 900; color: #fff;
-            margin-bottom: 0.3rem;
-            text-transform: uppercase; letter-spacing: 3px;
-        }
-        .login-subtitle {
-            text-align: center; color: #666;
-            font-size: 0.85rem; margin-bottom: 2rem;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
+        .login-title { text-align: center; font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 3px; }
+        .login-subtitle { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; }
         .form-group { margin-bottom: 1.5rem; }
-        .form-group label {
-            display: block; margin-bottom: 0.5rem;
-            color: #888; font-size: 0.85rem;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .form-group input {
-            width: 100%; padding: 0.9rem;
-            background: #1a1a1a; border: 1px solid #333;
-            border-radius: 8px; color: #fff; font-size: 1rem;
-        }
-        .form-group input:focus { outline: none; border-color: #666; }
-        .login-btn {
-            width: 100%; padding: 1rem;
-            background: #fff; color: #000;
-            border: none; border-radius: 8px;
-            font-size: 1rem; font-weight: 700;
-            cursor: pointer; text-transform: uppercase;
-            letter-spacing: 2px; transition: all 0.3s;
-        }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input, .form-group select { width: 100%; padding: 0.9rem; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 1rem; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #666; }
+        .login-btn { width: 100%; padding: 1rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .login-btn:hover { background: #ddd; transform: translateY(-2px); }
         .login-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
-        .error-msg {
-            color: #ff4444; text-align: center;
-            margin-top: 1rem; font-size: 0.9rem; display: none;
-        }
-        .warning-msg {
-            color: #FFC107; text-align: center;
-            margin-top: 1rem; font-size: 0.9rem; display: none;
-        }
-        .blocked-msg {
-            color: #ff4444; text-align: center;
-            margin-top: 1rem; font-size: 0.9rem; display: none;
-            background: #1a0000; border: 1px solid #ff4444;
-            padding: 1rem; border-radius: 8px;
-        }
-        .tentativas-info {
-            text-align: center; color: #666;
-            font-size: 0.8rem; margin-top: 0.5rem;
-        }
+        .error-msg { color: #ff4444; text-align: center; margin-top: 1rem; font-size: 0.9rem; display: none; }
+        .blocked-msg { color: #ff4444; text-align: center; margin-top: 1rem; font-size: 0.9rem; display: none; background: #1a0000; border: 1px solid #ff4444; padding: 1rem; border-radius: 8px; }
+        .tentativas-info { text-align: center; color: #666; font-size: 0.8rem; margin-top: 0.5rem; }
         .adm-panel { display: none; }
-        .adm-header {
-            background: #111; border-bottom: 1px solid #222;
-            padding: 1rem 2rem;
-            display: flex; justify-content: space-between;
-            align-items: center; position: fixed;
-            width: 100%; top: 0; z-index: 1000;
-        }
-        .adm-header-title {
-            font-size: 1.3rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 3px;
-        }
+        .adm-header { background: #111; border-bottom: 1px solid #222; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .adm-header-title { font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; }
         .adm-header-title span { color: #666; }
         .header-right { display: flex; align-items: center; gap: 1rem; }
-        .session-timer {
-            color: #666; font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        .session-timer { color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .session-timer span { color: #FFC107; }
-        .logout-btn {
-            padding: 0.5rem 1.5rem; background: transparent;
-            color: #888; border: 1px solid #333;
-            border-radius: 25px; cursor: pointer;
-            font-size: 0.85rem; text-transform: uppercase;
-            letter-spacing: 1px; transition: all 0.3s;
-        }
+        .logout-btn { padding: 0.5rem 1.5rem; background: transparent; color: #888; border: 1px solid #333; border-radius: 25px; cursor: pointer; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
         .logout-btn:hover { border-color: #666; color: #fff; }
-        .adm-content {
-            padding: 2rem; max-width: 1200px;
-            margin-left: auto; margin-right: auto;
-        }
-        .security-banner {
-            background: #1a1a00; border: 1px solid #333300;
-            border-radius: 10px; padding: 1rem 1.5rem;
-            margin-bottom: 2rem; display: flex;
-            align-items: center; gap: 1rem;
-            color: #888; font-size: 0.85rem;
-        }
+        .adm-content { padding: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        .security-banner { background: #1a1a00; border: 1px solid #333300; border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #888; font-size: 0.85rem; }
         .security-banner i { color: #FFC107; font-size: 1.2rem; }
-        .adm-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem; margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: #111; border: 1px solid #222;
-            border-radius: 15px; padding: 1.5rem; text-align: center;
-        }
+        .adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 1.5rem; text-align: center; }
         .stat-card i { font-size: 2rem; color: #666; margin-bottom: 0.5rem; display: block; }
         .stat-number { font-size: 2rem; font-weight: 900; color: #fff; }
         .stat-label { color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .section-title {
-            font-size: 1.2rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 3px;
-            margin-bottom: 1.5rem; color: #fff;
-            border-bottom: 1px solid #222; padding-bottom: 1rem;
-        }
-        .add-product-form {
-            background: #111; border: 1px solid #222;
-            border-radius: 15px; padding: 2rem; margin-bottom: 2rem;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem; margin-bottom: 1.5rem;
-        }
-        .form-group select {
-            width: 100%; padding: 0.9rem;
-            background: #1a1a1a; border: 1px solid #333;
-            border-radius: 8px; color: #fff; font-size: 1rem;
-        }
-        .form-group select:focus { outline: none; border-color: #666; }
+        .section-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1.5rem; color: #fff; border-bottom: 1px solid #222; padding-bottom: 1rem; }
+        .add-product-form { background: #111; border: 1px solid #222; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
         .tamanhos-group { margin-bottom: 1.5rem; }
-        .tamanhos-group label {
-            display: block; margin-bottom: 0.8rem; color: #888;
-            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .tamanhos-group label { display: block; margin-bottom: 0.8rem; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
         .tamanhos-checkboxes { display: flex; gap: 1rem; flex-wrap: wrap; }
         .tamanho-check { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
         .tamanho-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #fff; }
         .tamanho-check span { color: #888; font-size: 0.9rem; text-transform: uppercase; }
-        .add-btn {
-            padding: 1rem 2rem; background: #fff; color: #000;
-            border: none; border-radius: 8px; font-size: 1rem;
-            font-weight: 700; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 2px; transition: all 0.3s;
-        }
+        .add-btn { padding: 1rem 2rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .add-btn:hover { background: #ddd; transform: translateY(-2px); }
-        .products-table {
-            background: #111; border: 1px solid #222;
-            border-radius: 15px; overflow: hidden;
-        }
-        .table-header {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
-            padding: 1rem 1.5rem; background: #1a1a1a;
-            border-bottom: 1px solid #222; font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 1px; color: #666;
-        }
-        .table-row {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
-            padding: 1rem 1.5rem; border-bottom: 1px solid #1a1a1a;
-            align-items: center; transition: background 0.3s;
-        }
+        .add-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+        .products-table { background: #111; border: 1px solid #222; border-radius: 15px; overflow: hidden; margin-bottom: 2rem; }
+        .table-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; padding: 1rem 1.5rem; background: #1a1a1a; border-bottom: 1px solid #222; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+        .table-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; padding: 1rem 1.5rem; border-bottom: 1px solid #1a1a1a; align-items: center; transition: background 0.3s; }
         .table-row:hover { background: #1a1a1a; }
         .table-row:last-child { border-bottom: none; }
-        .product-name { font-weight: 600; color: #fff; }
+        .product-name { font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
         .product-category { color: #888; font-size: 0.85rem; text-transform: uppercase; }
         .product-price { color: #aaa; }
         .product-sizes { color: #666; font-size: 0.8rem; }
         .action-btns { display: flex; gap: 0.5rem; }
-        .edit-btn {
-            padding: 0.4rem 0.8rem; background: transparent;
-            color: #888; border: 1px solid #333;
-            border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s;
-        }
+        .edit-btn { padding: 0.4rem 0.8rem; background: transparent; color: #888; border: 1px solid #333; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s; }
         .edit-btn:hover { border-color: #fff; color: #fff; }
-        .delete-btn {
-            padding: 0.4rem 0.8rem; background: transparent;
-            color: #ff4444; border: 1px solid #ff4444;
-            border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s;
-        }
+        .delete-btn { padding: 0.4rem 0.8rem; background: transparent; color: #ff4444; border: 1px solid #ff4444; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s; }
         .delete-btn:hover { background: #ff4444; color: #fff; }
-        .empty-msg {
-            text-align: center; color: #666; padding: 3rem;
-            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .success-msg {
-            background: #1a2a1a; border: 1px solid #2a4a2a;
-            color: #4CAF50; padding: 1rem; border-radius: 8px;
-            margin-bottom: 1rem; text-align: center; display: none;
-        }
-        .modal {
-            display: none; position: fixed; z-index: 2000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-        }
-        .modal-content {
-            background: #111; border: 1px solid #222;
-            border-radius: 15px; margin: 5% auto; padding: 2rem;
-            width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto;
-        }
-        .modal-title {
-            font-size: 1.2rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 1.5rem; color: #fff;
-        }
+        .empty-msg { text-align: center; color: #666; padding: 3rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .success-msg { background: #1a2a1a; border: 1px solid #2a4a2a; color: #4CAF50; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; display: none; }
+        .error-upload { background: #2a1a1a; border: 1px solid #4a2a2a; color: #ff4444; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; display: none; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); }
+        .modal-content { background: #111; border: 1px solid #222; border-radius: 15px; margin: 5% auto; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+        .modal-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem; color: #fff; }
         .close-modal { float: right; color: #666; font-size: 1.5rem; cursor: pointer; }
         .close-modal:hover { color: #fff; }
-        .save-btn {
-            padding: 1rem 2rem; background: #fff; color: #000;
-            border: none; border-radius: 8px; font-size: 1rem;
-            font-weight: 700; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 2px; transition: all 0.3s; width: 100%; margin-top: 1rem;
-        }
+        .save-btn { padding: 1rem 2rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; width: 100%; margin-top: 1rem; }
         .save-btn:hover { background: #ddd; }
-        @media (max-width: 768px) {
-            .table-header { display: none; }
-            .table-row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; }
-            .adm-content { padding: 1rem; }
-        }
+        .upload-area { border: 2px dashed #333; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 1rem; }
+        .upload-area:hover { border-color: #666; }
+        .upload-area i { font-size: 2rem; color: #666; margin-bottom: 0.5rem; display: block; }
+        .upload-area p { color: #666; font-size: 0.9rem; }
+        .upload-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 1rem; display: none; }
+        .progress-bar { width: 100%; height: 4px; background: #222; border-radius: 2px; margin-top: 1rem; display: none; }
+        .progress-bar-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s; }
+        .loading-msg { color: #888; font-size: 0.85rem; text-align: center; margin-top: 0.5rem; display: none; }
+        @media (max-width: 768px) { .table-header { display: none; } .table-row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; } .adm-content { padding: 1rem; } }
     </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
 <div id="loginPage" class="login-page">
     <div class="login-box">
         <div class="login-logo">⚽</div>
@@ -263,33 +106,29 @@
             <i class="fas fa-lock"></i> Entrar
         </button>
         <p class="error-msg" id="errorMsg">❌ Usuário ou senha incorretos!</p>
-        <p class="warning-msg" id="warningMsg"></p>
         <p class="blocked-msg" id="blockedMsg"></p>
         <p class="tentativas-info" id="tentativasInfo"></p>
     </div>
 </div>
 
-<!-- PAINEL ADM -->
 <div id="admPanel" class="adm-panel">
     <div class="adm-header">
         <div class="adm-header-title">DW <span>Imports</span> | ADM</div>
         <div class="header-right">
-            <div class="session-timer">
-                Sessão: <span id="timerDisplay">30:00</span>
-            </div>
+            <div class="session-timer">Sessão: <span id="timerDisplay">30:00</span></div>
             <button class="logout-btn" onclick="fazerLogout()">
-                <i class="fas fa-sign-out-alt"></i> Sair
+                <i class="fas fa-sign-out-alt"></i>
+                                Sair
             </button>
         </div>
     </div>
 
-  <div class="adm-content" style="margin-top: 100px;">
+    <div class="adm-content" style="margin-top: 100px;">
         <div class="security-banner">
             <i class="fas fa-shield-alt"></i>
-            <span>🔐 Sessão segura ativa! Sua sessão expira automaticamente em 30 minutos por segurança.</span>
+            <span>🔐 Sessão segura ativa! Sua sessão expira automaticamente em 30 minutos.</span>
         </div>
 
-        <!-- STATS -->
         <div class="adm-stats">
             <div class="stat-card">
                 <i class="fas fa-box"></i>
@@ -313,10 +152,10 @@
             </div>
         </div>
 
-        <!-- ADICIONAR PRODUTO -->
         <div class="add-product-form">
             <h2 class="section-title">➕ Adicionar Novo Produto</h2>
             <div class="success-msg" id="successMsg">✅ Produto adicionado com sucesso!</div>
+            <div class="error-upload" id="errorUpload"></div>
             <div class="form-grid">
                 <div class="form-group">
                     <label>Nome do Produto</label>
@@ -329,7 +168,7 @@
                         <option value="brasileiro">Times Brasileiros</option>
                         <option value="retro">Camisas Retrô</option>
                         <option value="nba">NBA</option>
-                        <option value="seleções">Seleções</option>
+                        <option value="selecoes">Seleções</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -344,10 +183,20 @@
                     <label>Emoji do Produto</label>
                     <input type="text" id="prodEmoji" placeholder="Ex: 🔴⚫">
                 </div>
-                <div class="form-group">
-                    <label>URL da Imagem (opcional)</label>
-                    <input type="text" id="prodImagem" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Foto do Produto</label>
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Clique para selecionar uma foto</p>
+                    <p style="font-size:0.8rem; margin-top:0.5rem; color:#444;">JPG, PNG até 32MB</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImagem(this)">
+                    <img id="uploadPreview" class="upload-preview">
                 </div>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <p class="loading-msg" id="loadingMsg">⏳ Fazendo upload da imagem...</p>
             </div>
             <div class="tamanhos-group">
                 <label>Tamanhos Disponíveis</label>
@@ -361,12 +210,11 @@
                     <label class="tamanho-check"><input type="checkbox" value="XXG"> <span>XXG</span></label>
                 </div>
             </div>
-            <button class="add-btn" onclick="adicionarProduto()">
+            <button class="add-btn" id="addBtn" onclick="adicionarProduto()">
                 <i class="fas fa-plus"></i> Adicionar Produto
             </button>
         </div>
 
-        <!-- LISTA DE PRODUTOS -->
         <h2 class="section-title">📦 Produtos Cadastrados</h2>
         <div class="products-table">
             <div class="table-header">
@@ -384,12 +232,11 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR -->
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="fecharModal()">&times;</span>
         <h2 class="modal-title">✏️ Editar Produto</h2>
-        <input type="hidden" id="editIndex">
+        <input type="hidden" id="editId">
         <div class="form-grid">
             <div class="form-group">
                 <label>Nome do Produto</label>
@@ -417,10 +264,16 @@
                 <label>Emoji</label>
                 <input type="text" id="editEmoji">
             </div>
-            <div class="form-group">
-                <label>URL da Imagem</label>
-                <input type="text" id="editImagem">
+        </div>
+        <div class="form-group">
+            <label>Foto do Produto</label>
+            <div class="upload-area" onclick="document.getElementById('fileInputEdit').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Clique para trocar a foto</p>
+                <input type="file" id="fileInputEdit" accept="image/*" style="display:none" onchange="previewImagemEdit(this)">
+                <img id="editPreview" class="upload-preview">
             </div>
+            <input type="hidden" id="editImagem">
         </div>
         <div class="tamanhos-group">
             <label>Tamanhos Disponíveis</label>
@@ -440,50 +293,56 @@
     </div>
 </div>
 
-<script>
-    const ADMIN_HASH = '8a9b4c2d1e6f3a7b5c8d2e4f1a6b3c7d';
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
+        authDomain: "dw-imports.firebaseapp.com",
+        projectId: "dw-imports",
+        storageBucket: "dw-imports.firebasestorage.app",
+        messagingSenderId: "802077401567",
+        appId: "1:802077401567:web:d604fd84ca4abf032aa46a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const IMGBB_API_KEY = 'cb56c979afadb3bf3bcea59156e03b55';
     const MAX_TENTATIVAS = 3;
     const BLOQUEIO_TEMPO = 5 * 60 * 1000;
     const SESSAO_TEMPO = 30 * 60 * 1000;
     let sessionTimer = null;
     let sessionTimeLeft = SESSAO_TEMPO;
-    let tentativasBloqueadas = 0;
 
     function verificarCredenciais(user, pass) {
         return user === atob('YWRtaW4xNTEy') && pass === atob('MTUxMjk4RHVkdQ==');
     }
 
-    function fazerLogin() {
+    window.fazerLogin = function() {
         const bloqueio = localStorage.getItem('admBloqueio');
         if(bloqueio && Date.now() < parseInt(bloqueio)) {
             const restante = Math.ceil((parseInt(bloqueio) - Date.now()) / 60000);
             mostrarBloqueio(`🔒 Acesso bloqueado! Tente novamente em ${restante} minuto(s).`);
             return;
         }
-
         const user = document.getElementById('admUser').value.trim();
         const pass = document.getElementById('admPass').value;
-
         if(!user || !pass) {
             document.getElementById('errorMsg').style.display = 'block';
             document.getElementById('errorMsg').textContent = '❌ Preencha todos os campos!';
             return;
         }
-
         if(verificarCredenciais(user, pass)) {
             localStorage.removeItem('admTentativas');
             localStorage.removeItem('admBloqueio');
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('admPanel').style.display = 'block';
             iniciarSessao();
-            atualizarStats();
-            renderProdutos();
+            carregarProdutos();
         } else {
             let tentativas = parseInt(localStorage.getItem('admTentativas') || '0') + 1;
             localStorage.setItem('admTentativas', tentativas);
-            tentativasBloqueadas++;
-            localStorage.setItem('admBloqueadas', tentativasBloqueadas);
-
             if(tentativas >= MAX_TENTATIVAS) {
                 localStorage.setItem('admBloqueio', Date.now() + BLOQUEIO_TEMPO);
                 localStorage.removeItem('admTentativas');
@@ -497,15 +356,13 @@
                 const restantes = MAX_TENTATIVAS - tentativas;
                 document.getElementById('errorMsg').style.display = 'block';
                 document.getElementById('errorMsg').textContent = '❌ Usuário ou senha incorretos!';
-                document.getElementById('tentativasInfo').textContent = 
-                    `⚠️ ${restantes} tentativa(s) restante(s) antes do bloqueio`;
+                document.getElementById('tentativasInfo').textContent = `⚠️ ${restantes} tentativa(s) restante(s)`;
             }
         }
     }
 
     function mostrarBloqueio(msg) {
         document.getElementById('errorMsg').style.display = 'none';
-        document.getElementById('warningMsg').style.display = 'none';
         document.getElementById('blockedMsg').style.display = 'block';
         document.getElementById('blockedMsg').textContent = msg;
         document.getElementById('tentativasInfo').textContent = '';
@@ -518,17 +375,16 @@
             sessionTimeLeft -= 1000;
             const minutos = Math.floor(sessionTimeLeft / 60000);
             const segundos = Math.floor((sessionTimeLeft % 60000) / 1000);
-            document.getElementById('timerDisplay').textContent = 
-                `${minutos}:${segundos.toString().padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
             if(sessionTimeLeft <= 0) {
                 clearInterval(sessionTimer);
-                alert('⏰ Sessão expirada por segurança! Faça login novamente.');
-                fazerLogout();
+                alert('⏰ Sessão expirada! Faça login novamente.');
+                window.fazerLogout();
             }
         }, 1000);
     }
 
-    function fazerLogout() {
+    window.fazerLogout = function() {
         if(sessionTimer) clearInterval(sessionTimer);
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('admPanel').style.display = 'none';
@@ -538,15 +394,86 @@
         document.getElementById('tentativasInfo').textContent = '';
     }
 
-    let produtos = JSON.parse(localStorage.getItem('dwImportsProdutos')) || [];
+    window.previewImagem = function(input) {
+        if(input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('uploadPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
-    function adicionarProduto() {
+    window.previewImagemEdit = function(input) {
+        if(input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('editPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+                        reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function uploadImagem(file) {
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const loadingMsg = document.getElementById('loadingMsg');
+        progressBar.style.display = 'block';
+        loadingMsg.style.display = 'block';
+        progressFill.style.width = '30%';
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('key', IMGBB_API_KEY);
+        try {
+            progressFill.style.width = '60%';
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+                method: 'POST',
+                body: formData
+            });
+            progressFill.style.width = '90%';
+            const data = await response.json();
+            progressFill.style.width = '100%';
+            loadingMsg.textContent = '✅ Upload concluído!';
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+                loadingMsg.style.display = 'none';
+                progressFill.style.width = '0%';
+                loadingMsg.textContent = '⏳ Fazendo upload da imagem...';
+            }, 2000);
+            if(data.success) {
+                return data.data.url;
+            } else {
+                throw new Error('Erro no upload');
+            }
+        } catch(error) {
+            progressBar.style.display = 'none';
+            loadingMsg.style.display = 'none';
+            throw error;
+        }
+    }
+
+    async function carregarProdutos() {
+        onSnapshot(collection(db, 'produtos'), (snapshot) => {
+            const produtos = [];
+            snapshot.forEach(d => {
+                produtos.push({ id: d.id, ...d.data() });
+            });
+            renderProdutos(produtos);
+            atualizarStats(produtos);
+        });
+    }
+
+    window.adicionarProduto = async function() {
         const nome = document.getElementById('prodNome').value;
         const categoria = document.getElementById('prodCategoria').value;
         const preco = document.getElementById('prodPreco').value;
         const estoque = document.getElementById('prodEstoque').value;
         const emoji = document.getElementById('prodEmoji').value || '👕';
-        const imagem = document.getElementById('prodImagem').value;
+        const fileInput = document.getElementById('fileInput');
         if(!nome || !preco || !estoque) {
             alert('❌ Preencha pelo menos Nome, Preço e Estoque!');
             return;
@@ -559,19 +486,34 @@
             alert('❌ Selecione pelo menos um tamanho!');
             return;
         }
-        const produto = {
-            id: Date.now(), nome, categoria,
-            preco: parseFloat(preco), estoque: parseInt(estoque),
-            emoji, imagem, tamanhos: tamanhosSelecionados
-        };
-        produtos.push(produto);
-        salvarProdutos();
-        renderProdutos();
-        atualizarStats();
-        limparFormulario();
-        const msg = document.getElementById('successMsg');
-        msg.style.display = 'block';
-        setTimeout(() => msg.style.display = 'none', 3000);
+        const addBtn = document.getElementById('addBtn');
+        addBtn.disabled = true;
+        addBtn.textContent = '⏳ Salvando...';
+        try {
+            let imagemUrl = '';
+            if(fileInput.files && fileInput.files[0]) {
+                imagemUrl = await uploadImagem(fileInput.files[0]);
+            }
+            await addDoc(collection(db, 'produtos'), {
+                nome, categoria,
+                preco: parseFloat(preco),
+                estoque: parseInt(estoque),
+                emoji, imagem: imagemUrl,
+                tamanhos: tamanhosSelecionados,
+                criadoEm: new Date().toISOString()
+            });
+            limparFormulario();
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        } catch(error) {
+            const errorUpload = document.getElementById('errorUpload');
+            errorUpload.textContent = '❌ Erro ao salvar produto! Tente novamente.';
+            errorUpload.style.display = 'block';
+            setTimeout(() => errorUpload.style.display = 'none', 3000);
+        }
+        addBtn.disabled = false;
+        addBtn.innerHTML = '<i class="fas fa-plus"></i> Adicionar Produto';
     }
 
     function limparFormulario() {
@@ -579,17 +521,14 @@
         document.getElementById('prodPreco').value = '';
         document.getElementById('prodEstoque').value = '';
         document.getElementById('prodEmoji').value = '';
-        document.getElementById('prodImagem').value = '';
+        document.getElementById('fileInput').value = '';
+        document.getElementById('uploadPreview').style.display = 'none';
         document.querySelectorAll('.tamanhos-checkboxes input[type="checkbox"]').forEach(cb => {
             cb.checked = false;
         });
     }
 
-    function salvarProdutos() {
-        localStorage.setItem('dwImportsProdutos', JSON.stringify(produtos));
-    }
-
-    function renderProdutos() {
+    function renderProdutos(produtos) {
         const lista = document.getElementById('productsList');
         if(produtos.length === 0) {
             lista.innerHTML = '<div class="empty-msg">Nenhum produto cadastrado ainda!</div>';
@@ -597,24 +536,27 @@
         }
         const categorias = {
             'europeu': 'Times Europeus', 'brasileiro': 'Times Brasileiros',
-            'retro': 'Camisas Retrô', 'nba': 'NBA', 'seleções': 'Seleções'
+            'retro': 'Camisas Retrô', 'nba': 'NBA', 'selecoes': 'Seleções'
         };
-        lista.innerHTML = produtos.map((p, index) => `
+        lista.innerHTML = produtos.map(p => `
             <div class="table-row">
-                <div class="product-name">${p.emoji} ${p.nome}</div>
-                <div class="product-category">${categorias[p.categoria]}</div>
+                <div class="product-name">
+                    ${p.imagem ? `<img src="${p.imagem}" style="width:40px;height:40px;object-fit:cover;border-radius:5px;">` : p.emoji}
+                    ${p.nome}
+                </div>
+                <div class="product-category">${categorias[p.categoria] || p.categoria}</div>
                 <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-                <div class="product-stock">
+                <div>
                     <span style="color: ${p.estoque > 5 ? '#4CAF50' : p.estoque > 0 ? '#FFC107' : '#ff4444'}">
                         ${p.estoque} un.
                     </span>
                 </div>
                 <div class="product-sizes">${p.tamanhos.join(', ')}</div>
                 <div class="action-btns">
-                    <button class="edit-btn" onclick="abrirEdicao(${index})">
+                    <button class="edit-btn" onclick="window.abrirEdicao('${p.id}', ${JSON.stringify(p).replace(/'/g, "\\'")})">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="delete-btn" onclick="deletarProduto(${index})">
+                    <button class="delete-btn" onclick="window.deletarProduto('${p.id}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -622,7 +564,7 @@
         `).join('');
     }
 
-    function atualizarStats() {
+    function atualizarStats(produtos) {
         document.getElementById('totalProdutos').textContent = produtos.length;
         const cats = new Set(produtos.map(p => p.categoria));
         document.getElementById('totalCategorias').textContent = cats.size;
@@ -632,36 +574,42 @@
         document.getElementById('totalAcessos').textContent = bloqueadas;
     }
 
-    function deletarProduto(index) {
+    window.deletarProduto = async function(id) {
         if(confirm('⚠️ Tem certeza que deseja deletar este produto?')) {
-            produtos.splice(index, 1);
-            salvarProdutos();
-            renderProdutos();
-            atualizarStats();
+            try {
+                await deleteDoc(doc(db, 'produtos', id));
+                alert('✅ Produto deletado com sucesso!');
+            } catch(error) {
+                alert('❌ Erro ao deletar produto!');
+            }
         }
     }
 
-    function abrirEdicao(index) {
-        const p = produtos[index];
-        document.getElementById('editIndex').value = index;
-        document.getElementById('editNome').value = p.nome;
-        document.getElementById('editCategoria').value = p.categoria;
-        document.getElementById('editPreco').value = p.preco;
-        document.getElementById('editEstoque').value = p.estoque;
-        document.getElementById('editEmoji').value = p.emoji;
-        document.getElementById('editImagem').value = p.imagem || '';
+    window.abrirEdicao = function(id, produto) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNome').value = produto.nome;
+        document.getElementById('editCategoria').value = produto.categoria;
+        document.getElementById('editPreco').value = produto.preco;
+        document.getElementById('editEstoque').value = produto.estoque;
+        document.getElementById('editEmoji').value = produto.emoji;
+        document.getElementById('editImagem').value = produto.imagem || '';
+        if(produto.imagem) {
+            const preview = document.getElementById('editPreview');
+            preview.src = produto.imagem;
+            preview.style.display = 'block';
+        }
         document.querySelectorAll('#editTamanhos input[type="checkbox"]').forEach(cb => {
-            cb.checked = p.tamanhos.includes(cb.value);
+            cb.checked = produto.tamanhos.includes(cb.value);
         });
         document.getElementById('editModal').style.display = 'block';
     }
 
-    function fecharModal() {
+    window.fecharModal = function() {
         document.getElementById('editModal').style.display = 'none';
     }
 
-    function salvarEdicao() {
-        const index = document.getElementById('editIndex').value;
+    window.salvarEdicao = async function() {
+        const id = document.getElementById('editId').value;
         const tamanhosSelecionados = [];
         document.querySelectorAll('#editTamanhos input[type="checkbox"]:checked').forEach(cb => {
             tamanhosSelecionados.push(cb.value);
@@ -670,35 +618,39 @@
             alert('❌ Selecione pelo menos um tamanho!');
             return;
         }
-        produtos[index] = {
-            ...produtos[index],
-            nome: document.getElementById('editNome').value,
-            categoria: document.getElementById('editCategoria').value,
-            preco: parseFloat(document.getElementById('editPreco').value),
-            estoque: parseInt(document.getElementById('editEstoque').value),
-            emoji: document.getElementById('editEmoji').value,
-            imagem: document.getElementById('editImagem').value,
-            tamanhos: tamanhosSelecionados
-        };
-        salvarProdutos();
-        renderProdutos();
-        atualizarStats();
-        fecharModal();
-        alert('✅ Produto atualizado com sucesso!');
+        try {
+            let imagemUrl = document.getElementById('editImagem').value;
+            const fileInputEdit = document.getElementById('fileInputEdit');
+            if(fileInputEdit.files && fileInputEdit.files[0]) {
+                imagemUrl = await uploadImagem(fileInputEdit.files[0]);
+            }
+            await updateDoc(doc(db, 'produtos', id), {
+                nome: document.getElementById('editNome').value,
+                categoria: document.getElementById('editCategoria').value,
+                preco: parseFloat(document.getElementById('editPreco').value),
+                estoque: parseInt(document.getElementById('editEstoque').value),
+                emoji: document.getElementById('editEmoji').value,
+                imagem: imagemUrl,
+                tamanhos: tamanhosSelecionados
+            });
+            window.fecharModal();
+            alert('✅ Produto atualizado com sucesso!');
+        } catch(error) {
+            alert('❌ Erro ao atualizar produto!');
+        }
     }
 
     document.getElementById('admUser').addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') fazerLogin();
+        if(e.key === 'Enter') window.fazerLogin();
     });
     document.getElementById('admPass').addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') fazerLogin();
+        if(e.key === 'Enter') window.fazerLogin();
     });
     window.onclick = function(event) {
         if(event.target === document.getElementById('editModal')) {
-            fecharModal();
+            window.fecharModal();
         }
     }
 </script>
-
 </body>
 </html>
