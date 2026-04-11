@@ -40,10 +40,6 @@
         .modal-content { background-color: #111; margin: 10% auto; padding: 2rem; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); border: 1px solid #222; }
         .close { color: #666; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close:hover { color: #fff; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #888; }
-        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #333; border-radius: 8px; font-size: 1rem; background: #1a1a1a; color: #fff; }
-        .form-group input:focus { outline: none; border-color: #666; }
         .btn { width: 100%; padding: 1rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px; }
         .btn:hover { background: #ddd; transform: translateY(-2px); }
         main { margin-top: 80px; padding-bottom: 2rem; }
@@ -63,7 +59,6 @@
         .product-image { width: 100%; height: 280px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
         .product-image img:hover { transform: scale(1.05); }
-        .product-image i { font-size: 4rem; color: #444; }
         .product-image span { font-size: 4rem; }
         .product-info { padding: 1.5rem; }
         .product-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
@@ -108,17 +103,16 @@
         <div class="landing-feature"><i class="fas fa-star"></i><p>Primeira Linha</p></div>
         <div class="landing-feature"><i class="fas fa-shield-alt"></i><p>Qualidade Garantida</p></div>
         <div class="landing-feature"><i class="fas fa-truck"></i><p>Entrega Rápida</p></div>
-        <div class="landing-feature"><i class="fas fa-heart"></i
-                                                                 ></i><p>Feito com Paixão</p></div>
+        <div class="landing-feature"><i class="fas fa-heart"></i><p>Feito com Paixão</p></div>
     </div>
     <div class="landing-divider"></div>
     <p class="landing-description">
-        Bem-vindo à <strong style="color:#fff;">DW Imports</strong>, a loja especializada em camisas 
-        de time de alta qualidade! Trabalhamos com os melhores times do mundo, 
-        desde os gigantes europeus até os grandes clubes brasileiros. 
-        Nossas camisas são todas de <strong style="color:#fff;">primeira linha</strong>, 
-        com tecido premium, acabamento impecável e muito estilo. 
-        Aqui você encontra sua camisa favorita com o melhor preço e entrega rápida para todo o Brasil! 🇧🇷
+        Bem-vindo à <strong style="color:#fff;">DW Imports</strong>, a loja especializada em camisas
+        de time de alta qualidade! Trabalhamos com os melhores times do mundo,
+        desde os gigantes europeus até os grandes clubes brasileiros.
+        Nossas camisas são todas de <strong style="color:#fff;">primeira linha</strong>,
+        com tecido premium, acabamento impecável e muito estilo.
+                Aqui você encontra sua camisa favorita com o melhor preço e entrega rápida para todo o Brasil! 🇧🇷
     </p>
     <button class="landing-btn" onclick="entrarCatalogo()">
         <i class="fas fa-futbol"></i> Ver Catálogo
@@ -225,10 +219,7 @@
             <button class="back-btn" onclick="showSection('home')">← Voltar</button>
             <h2 class="section-title">🏆 Times Europeus</h2>
             <div class="products-grid" id="grid-europeu">
-                <div class="loading-products">
-                    <i class="fas fa-spinner"></i>
-                    <p>Carregando produtos...</p>
-                </div>
+                <div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div>
             </div>
         </section>
 
@@ -236,10 +227,7 @@
             <button class="back-btn" onclick="showSection('home')">← Voltar</button>
             <h2 class="section-title">🇧🇷 Times Brasileiros</h2>
             <div class="products-grid" id="grid-brasileiro">
-                <div class="loading-products">
-                    <i class="fas fa-spinner"></i>
-                    <p>Carregando produtos...</p>
-                </div>
+                <div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div>
             </div>
         </section>
 
@@ -247,10 +235,7 @@
             <button class="back-btn" onclick="showSection('home')">← Voltar</button>
             <h2 class="section-title">👕 Camisas Retrô</h2>
             <div class="products-grid" id="grid-retro">
-                <div class="loading-products">
-                    <i class="fas fa-spinner"></i>
-                    <p>Carregando produtos...</p>
-                </div>
+                <div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div>
             </div>
         </section>
 
@@ -258,10 +243,7 @@
             <button class="back-btn" onclick="showSection('home')">← Voltar</button>
             <h2 class="section-title">🏀 Camisas NBA</h2>
             <div class="products-grid" id="grid-nba">
-                <div class="loading-products">
-                    <i class="fas fa-spinner"></i>
-                    <p>Carregando produtos...</p>
-                </div>
+                <div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div>
             </div>
         </section>
 
@@ -269,109 +251,48 @@
             <button class="back-btn" onclick="showSection('home')">← Voltar</button>
             <h2 class="section-title">🌍 Seleções</h2>
             <div class="products-grid" id="grid-selecoes">
-                <div class="loading-products">
-                    <i class="fas fa-spinner"></i>
-                    <p>Carregando produtos...</p>
-                </div>
+                <div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div>
             </div>
         </section>
     </div>
 </main>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
-        authDomain: "dw-imports.firebaseapp.com",
-        projectId: "dw-imports",
-        storageBucket: "dw-imports.firebasestorage.app",
-        messagingSenderId: "802077401567",
-        appId: "1:802077401567:web:d604fd84ca4abf032aa46a"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+<script>
     let cart = [];
     let selectedPayment = 'Cartão';
     let todosProdutos = [];
 
-    onSnapshot(collection(db, 'produtos'), (snapshot) => {
-        todosProdutos = [];
-        snapshot.forEach(doc => {
-            todosProdutos.push({ id: doc.id, ...doc.data() });
-        });
-        renderTodasCategorias();
-    });
-
-    function renderTodasCategorias() {
-        const categorias = ['europeu', 'brasileiro', 'retro', 'nba', 'selecoes'];
-        categorias.forEach(cat => {
-            const produtos = todosProdutos.filter(p => p.categoria === cat);
-            const grid = document.getElementById(`grid-${cat}`);
-            if(!grid) return;
-            if(produtos.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-category">
-                        <i class="fas fa-box-open"></i>
-                        <p>Nenhum produto disponível ainda!</p>
-                    </div>`;
-                return;
-            }
-            grid.innerHTML = produtos.map(p => `
-                <div class="product-card">
-                    <div class="product-image">
-                        ${p.imagem 
-                            ? `<img src="${p.imagem}" alt="${p.nome}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                               <span style="display:none; font-size:4rem; align-items:center; justify-content:center; width:100%; height:100%;">${p.emoji}</span>`
-                            : `<span style="font-size:4rem;">${p.emoji}</span>`
-                        }
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${p.nome}</div>
-                        <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-                        <div class="product-sizes">Tamanhos: ${p.tamanhos.join(', ')}</div>
-                        <button class="btn" onclick="window.addToCart('${p.id}', '${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.emoji}')">
-                            🛒 Adicionar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        });
-    }
-
-    window.entrarCatalogo = function() {
+    function entrarCatalogo() {
         document.getElementById('landingPage').classList.add('hidden');
         document.getElementById('catalogo').classList.remove('hidden');
         window.scrollTo(0, 0);
     }
 
-    window.showSection = function(section) {
+    function showSection(section) {
         const sections = ['home', 'europeu', 'brasileiro', 'retro', 'nba', 'selecoes'];
         sections.forEach(s => document.getElementById(s).classList.add('hidden'));
         document.getElementById(section).classList.remove('hidden');
-        document.getElementById('cartModal').style.display = 'none';
+        const modal = document.getElementById('cartModal');
+        if(modal) modal.style.display = 'none';
         window.scrollTo(0, 0);
     }
 
-    window.toggleCart = function() {
+    function toggleCart() {
         const modal = document.getElementById('cartModal');
         modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
         renderCart();
     }
 
-    window.addToCart = function(id, name, price, emoji) {
+    function addToCart(id, name, price, emoji) {
         const existing = cart.find(item => item.id === id);
         if(existing) {
             existing.quantity++;
         } else {
-            cart.push({ id, name, price, emoji, quantity: 1 });
+            cart.push({ id, name, price: parseFloat(price), emoji, quantity: 1 });
         }
         updateCartCount();
-        alert(`✅ ${name} adicionado ao carrinho!`);
+        alert('✅ ' + name + ' adicionado ao carrinho!');
     }
 
     function updateCartCount() {
@@ -394,34 +315,33 @@
                     <strong style="color:#fff;">${item.name}</strong><br>
                     <span style="color:#aaa;">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
                     <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="window.changeQuantity(${index}, -1)">-</button>
+                        <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
                         <span style="color:#fff;">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="window.changeQuantity(${index}, 1)">+</button>
-                        <button class="quantity-btn" onclick="window.removeItem(${index})" style="background:#333; margin-left:0.5rem;">🗑</button>
+                        <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                        <button class="quantity-btn" onclick="removeItem(${index})" style="background:#333; margin-left:0.5rem;">🗑</button>
                     </div>
                 </div>
                 <strong style="color:#fff;">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</strong>
             </div>
         `).join('');
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotal.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+        cartTotal.textContent = 'Total: R$ ' + total.toFixed(2).replace('.', ',');
     }
 
-    window.changeQuantity = function(index, change) {
+    function changeQuantity(index, change) {
         cart[index].quantity += change;
         if(cart[index].quantity <= 0) cart.splice(index, 1);
         updateCartCount();
         renderCart();
     }
 
-    window.removeItem = function(index) {
+    function removeItem(index) {
         cart.splice(index, 1);
         updateCartCount();
-        renderCart
-        ();
+        renderCart();
     }
 
-    window.showPayment = function() {
+    function showPayment() {
         if(cart.length === 0) {
             alert('❌ Seu carrinho está vazio!');
             return;
@@ -429,13 +349,13 @@
         document.getElementById('paymentForm').style.display = 'block';
     }
 
-    window.selectPayment = function(el, method) {
+    function selectPayment(el, method) {
         document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
         el.classList.add('active');
         selectedPayment = method;
     }
 
-    window.finalizarCompra = function() {
+    function finalizarCompra() {
         if(cart.length === 0) {
             alert('❌ Seu carrinho está vazio!');
             return;
@@ -444,20 +364,75 @@
         let mensagem = '🛒 *Novo Pedido - DW Imports*\n\n';
         mensagem += '*Itens do Pedido:*\n';
         cart.forEach(item => {
-            mensagem += `• ${item.emoji} ${item.name} x${item.quantity} = R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}\n`;
+            mensagem += '• ' + item.emoji + ' ' + item.name + ' x' + item.quantity + ' = R$ ' + (item.price * item.quantity).toFixed(2).replace('.', ',') + '\n';
         });
-        mensagem += `\n*Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
-        mensagem += `\n*Pagamento: ${selectedPayment}*`;
+        mensagem += '\n*Total: R$ ' + total.toFixed(2).replace('.', ',') + '*';
+        mensagem += '\n*Pagamento: ' + selectedPayment + '*';
         mensagem += '\n\n_Pedido feito pelo site DW Imports_ 🚀';
-        const whatsappUrl = `https://wa.me/5521979669281?text=${encodeURIComponent(mensagem)}`;
+        const whatsappUrl = 'https://wa.me/5521979669281?text=' + encodeURIComponent(mensagem);
         window.open(whatsappUrl, '_blank');
     }
 
-    window.onclick = function(event) {
-        if(event.target === document.getElementById('cartModal')) {
-            document.getElementById('cartModal').style.display = 'none';
-        }
+    function renderTodasCategorias() {
+        const categorias = ['europeu', 'brasileiro', 'retro', 'nba', 'selecoes'];
+        categorias.forEach(cat => {
+            const produtos = todosProdutos.filter(p => p.categoria === cat);
+            const grid = document.getElementById('grid-' + cat);
+            if(!grid) return;
+            if(produtos.length === 0) {
+                grid.innerHTML = '<div class="empty-category"><i class="fas fa-box-open"></i><p>Nenhum produto disponível ainda!</p></div>';
+                return;
+            }
+            grid.innerHTML = produtos.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${p.imagem
+                            ? '<img src="' + p.imagem + '" alt="' + p.nome + '" onerror="this.style.display=\'none\'">'
+                            : '<span>' + p.emoji + '</span>'
+                        }
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${p.nome}</div>
+                        <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                        <div class="product-sizes">Tamanhos: ${p.tamanhos.join(', ')}</div>
+                        <button class="btn" onclick="addToCart('${p.id}', '${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.emoji}')">
+                            🛒 Adicionar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        });
     }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('cartModal');
+        if(event.target === modal) modal.style.display = 'none';
+    }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
+        authDomain: "dw-imports.firebaseapp.com",
+        projectId: "dw-imports",
+        storageBucket: "dw-imports.firebasestorage.app",
+        messagingSenderId: "802077401567",
+        appId: "1:802077401567:web:d604fd84ca4abf032aa46a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    onSnapshot(collection(db, 'produtos'), (snapshot) => {
+        todosProdutos = [];
+        snapshot.forEach(doc => {
+            todosProdutos.push({ id: doc.id, ...doc.data() });
+        });
+        renderTodasCategorias();
+    });
 </script>
 </body>
 </html>
