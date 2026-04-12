@@ -1,656 +1,339 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DW Imports - Painel ADM</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; background: #0a0a0a; min-height: 100vh; color: #fff; }
-        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); }
-        .login-box { background: #111; border: 1px solid #222; border-radius: 20px; padding: 3rem; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .login-logo { text-align: center; font-size: 3rem; margin-bottom: 0.5rem; }
-        .login-title { text-align: center; font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 3px; }
-        .login-subtitle { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-        .form-group input, .form-group select { width: 100%; padding: 0.9rem; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 1rem; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #666; }
-        .login-btn { width: 100%; padding: 1rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
-        .login-btn:hover { background: #ddd; transform: translateY(-2px); }
-        .login-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
-        .error-msg { color: #ff4444; text-align: center; margin-top: 1rem; font-size: 0.9rem; display: none; }
-        .blocked-msg { color: #ff4444; text-align: center; margin-top: 1rem; font-size: 0.9rem; display: none; background: #1a0000; border: 1px solid #ff4444; padding: 1rem; border-radius: 8px; }
-        .tentativas-info { text-align: center; color: #666; font-size: 0.8rem; margin-top: 0.5rem; }
-        .adm-panel { display: none; }
-        .adm-header { background: #111; border-bottom: 1px solid #222; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; }
-        .adm-header-title { font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; }
-        .adm-header-title span { color: #666; }
-        .header-right { display: flex; align-items: center; gap: 1rem; }
-        .session-timer { color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .session-timer span { color: #FFC107; }
-        .logout-btn { padding: 0.5rem 1.5rem; background: transparent; color: #888; border: 1px solid #333; border-radius: 25px; cursor: pointer; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
-        .logout-btn:hover { border-color: #666; color: #fff; }
-        .adm-content { padding: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
-        .security-banner { background: #1a1a00; border: 1px solid #333300; border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: #888; font-size: 0.85rem; }
-        .security-banner i { color: #FFC107; font-size: 1.2rem; }
-        .adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 1.5rem; text-align: center; }
-        .stat-card i { font-size: 2rem; color: #666; margin-bottom: 0.5rem; display: block; }
-        .stat-number { font-size: 2rem; font-weight: 900; color: #fff; }
-        .stat-label { color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .section-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1.5rem; color: #fff; border-bottom: 1px solid #222; padding-bottom: 1rem; }
-        .add-product-form { background: #111; border: 1px solid #222; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
-        .tamanhos-group { margin-bottom: 1.5rem; }
-        .tamanhos-group label { display: block; margin-bottom: 0.8rem; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-        .tamanhos-checkboxes { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .tamanho-check { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .tamanho-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #fff; }
-        .tamanho-check span { color: #888; font-size: 0.9rem; text-transform: uppercase; }
-        .add-btn { padding: 1rem 2rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
-        .add-btn:hover { background: #ddd; transform: translateY(-2px); }
-        .add-btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
-        .products-table { background: #111; border: 1px solid #222; border-radius: 15px; overflow: hidden; margin-bottom: 2rem; }
-        .table-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; padding: 1rem 1.5rem; background: #1a1a1a; border-bottom: 1px solid #222; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #666; }
-        .table-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr; padding: 1rem 1.5rem; border-bottom: 1px solid #1a1a1a; align-items: center; transition: background 0.3s; }
-        .table-row:hover { background: #1a1a1a; }
-        .table-row:last-child { border-bottom: none; }
-        .product-name { font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
-        .product-category { color: #888; font-size: 0.85rem; text-transform: uppercase; }
-        .product-price { color: #aaa; }
-        .product-sizes { color: #666; font-size: 0.8rem; }
-        .action-btns { display: flex; gap: 0.5rem; }
-        .edit-btn { padding: 0.4rem 0.8rem; background: transparent; color: #888; border: 1px solid #333; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s; }
-        .edit-btn:hover { border-color: #fff; color: #fff; }
-        .delete-btn { padding: 0.4rem 0.8rem; background: transparent; color: #ff4444; border: 1px solid #ff4444; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s; }
-        .delete-btn:hover { background: #ff4444; color: #fff; }
-        .empty-msg { text-align: center; color: #666; padding: 3rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-        .success-msg { background: #1a2a1a; border: 1px solid #2a4a2a; color: #4CAF50; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; display: none; }
-        .error-upload { background: #2a1a1a; border: 1px solid #4a2a2a; color: #ff4444; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; display: none; }
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); }
-        .modal-content { background: #111; border: 1px solid #222; border-radius: 15px; margin: 5% auto; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
-        .modal-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem; color: #fff; }
-        .close-modal { float: right; color: #666; font-size: 1.5rem; cursor: pointer; }
-        .close-modal:hover { color: #fff; }
-        .save-btn { padding: 1rem 2rem; background: #fff; color: #000; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; width: 100%; margin-top: 1rem; }
-        .save-btn:hover { background: #ddd; }
-        .upload-area { border: 2px dashed #333; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 1rem; }
-        .upload-area:hover { border-color: #666; }
-        .upload-area i { font-size: 2rem; color: #666; margin-bottom: 0.5rem; display: block; }
-        .upload-area p { color: #666; font-size: 0.9rem; }
-        .upload-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 1rem; display: none; }
-        .progress-bar { width: 100%; height: 4px; background: #222; border-radius: 2px; margin-top: 1rem; display: none; }
-        .progress-bar-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s; }
-        .loading-msg { color: #888; font-size: 0.85rem; text-align: center; margin-top: 0.5rem; display: none; }
-        @media (max-width: 768px) { .table-header { display: none; } .table-row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem; } .adm-content { padding: 1rem; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DW Imports</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0a0a0a;color:#fff}
+.hidden{display:none!important}
+.landing-page{min-height:100vh;background:linear-gradient(135deg,#0a0a0a,#1a1a1a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+.landing-logo{font-size:5rem;margin-bottom:1rem}
+.landing-title{font-size:4rem;font-weight:900;margin-bottom:1rem;text-transform:uppercase;letter-spacing:5px}
+.landing-title span{color:#888}
+.landing-subtitle{font-size:1.2rem;color:#888;margin-bottom:2rem;max-width:600px;line-height:1.8}
+.landing-features{display:flex;gap:3rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center}
+.landing-feature{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.landing-feature i{font-size:2rem;color:#666}
+.landing-feature p{color:#888;font-size:0.85rem;text-transform:uppercase;letter-spacing:2px}
+.landing-divider{width:100px;height:2px;background:linear-gradient(90deg,transparent,#666,transparent);margin:1.5rem auto}
+.landing-description{max-width:700px;color:#777;font-size:1rem;line-height:2;margin-bottom:2.5rem}
+.landing-btn{padding:1.2rem 3rem;background:#fff;color:#000;border:none;border-radius:50px;font-size:1.1rem;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:3px;transition:all 0.3s}
+.landing-btn:hover{transform:translateY(-3px);background:#ddd}
+.landing-badges{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;justify-content:center}
+.badge{padding:0.5rem 1.2rem;border:1px solid #333;border-radius:50px;color:#666;font-size:0.8rem;text-transform:uppercase;letter-spacing:2px}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+header{background:rgba(10,10,10,0.98);position:fixed;width:100%;top:0;z-index:1000;border-bottom:1px solid #222}
+.header-content{display:flex;justify-content:space-between;align-items:center;padding:1rem 0}
+.logo{font-size:2rem;font-weight:bold;color:#fff;text-decoration:none}
+nav ul{display:flex;list-style:none;gap:1.5rem}
+nav a{text-decoration:none;color:#888;font-weight:500;transition:color 0.3s;text-transform:uppercase;font-size:0.85rem;letter-spacing:1px}
+nav a:hover{color:#fff}
+.cart-icon{position:relative;font-size:1.5rem;color:#888;cursor:pointer}
+.cart-icon:hover{color:#fff}
+.cart-count{position:absolute;top:-8px;right:-8px;background:#fff;color:#000;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85)}
+.modal-content{background:#111;margin:10% auto;padding:2rem;border-radius:15px;width:90%;max-width:400px;border:1px solid #222}
+.close{color:#666;float:right;font-size:28px;cursor:pointer}
+.close:hover{color:#fff}
+.btn{width:100%;padding:1rem;background:#fff;color:#000;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:2px}
+.btn:hover{background:#ddd}
+main{margin-top:80px;padding-bottom:2rem}
+.hero{text-align:center;padding:4rem 0;background:linear-gradient(135deg,#111,#1a1a1a);border-radius:20px;margin-bottom:3rem;border:1px solid #222}
+.hero h1{font-size:3rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:5px}
+.hero p{font-size:1.1rem;color:#666}
+.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:3rem}
+.category{background:#111;padding:2rem;border-radius:15px;text-align:center;border:1px solid #222;transition:all 0.3s;cursor:pointer}
+.category:hover{border-color:#555;transform:translateY(-5px);background:#1a1a1a}
+.category i{font-size:2.5rem;color:#666;margin-bottom:1rem;display:block}
+.category h2{font-size:1.1rem;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:1px}
+.category p{color:#666;font-size:0.9rem}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-bottom:3rem}
+.product-card{background:#111;border-radius:15px;overflow:hidden;border:1px solid #222;transition:all 0.3s}
+.product-card:hover{transform:translateY(-8px);border-color:#444}
+.product-image{width:100%;height:280px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.product-image span{font-size:4rem}
+.product-info{padding:1.5rem}
+.product-title{font-size:1.1rem;font-weight:bold;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:1px}
+.product-price{font-size:1.4rem;font-weight:bold;color:#aaa;margin-bottom:0.5rem}
+.product-sizes{color:#666;font-size:0.8rem;margin-bottom:1rem}
+.cart-modal .modal-content{max-width:600px;max-height:80vh;overflow-y:auto}
+.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #222;align-items:center}
+.cart-item-emoji{font-size:2.5rem}
+.cart-item-info{flex:1;color:#aaa}
+.quantity-controls{display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem}
+.quantity-btn{width:30px;height:30px;border:1px solid #333;background:#1a1a1a;color:#fff;border-radius:50%;cursor:pointer;font-size:1rem}
+.total{font-size:1.5rem;font-weight:bold;text-align:right;margin:1.5rem 0}
+.payment-form{display:none;margin-top:1rem}
+.payment-methods{display:flex;gap:1rem;margin-bottom:1.5rem}
+.payment-method{flex:1;padding:1rem;border:1px solid #333;border-radius:10px;text-align:center;cursor:pointer;transition:all 0.3s;background:#1a1a1a;color:#888}
+.payment-method.active{border-color:#fff;background:#222;color:#fff}
+.payment-method i{font-size:1.8rem;color:#666;display:block;margin-bottom:0.5rem}
+.payment-method.active i{color:#fff}
+.section-title{text-align:center;font-size:2rem;margin-bottom:2rem;text-transform:uppercase;letter-spacing:5px}
+.back-btn{display:inline-block;margin-bottom:1.5rem;padding:0.6rem 1.5rem;background:transparent;color:#888;border:1px solid #333;border-radius:25px;cursor:pointer;font-size:0.9rem;transition:all 0.3s;text-transform:uppercase;letter-spacing:1px}
+.back-btn:hover{border-color:#666;color:#fff}
+.whatsapp-btn{width:100%;padding:1rem;background:linear-gradient(45deg,#25D366,#128C7E);color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;text-transform:uppercase;letter-spacing:2px}
+.loading-products{text-align:center;padding:3rem;color:#666}
+.loading-products i{font-size:2rem;margin-bottom:1rem;display:block;animation:spin 1s linear infinite}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.empty-category{text-align:center;padding:3rem;color:#666}
+.empty-category i{font-size:3rem;margin-bottom:1rem;display:block}
+@media(max-width:768px){.landing-title{font-size:2.5rem}.landing-features{gap:1.5rem}.header-content{flex-direction:column;gap:1rem}nav ul{gap:0.8rem;flex-wrap:wrap;justify-content:center}.hero h1{font-size:2rem}.categories{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
-
-<div id="loginPage" class="login-page">
-    <div class="login-box">
-        <div class="login-logo">⚽</div>
-        <h1 class="login-title">DW Imports</h1>
-        <p class="login-subtitle">🔐 Painel Administrativo</p>
-        <div class="form-group">
-            <label>Usuário</label>
-            <input type="text" id="admUser" placeholder="Digite seu usuário">
-        </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="admPass" placeholder="••••••••">
-        </div>
-        <button class="login-btn" id="loginBtn" onclick="fazerLogin()">
-            <i class="fas fa-lock"></i> Entrar
-        </button>
-        <p class="error-msg" id="errorMsg">❌ Usuário ou senha incorretos!</p>
-        <p class="blocked-msg" id="blockedMsg"></p>
-        <p class="tentativas-info" id="tentativasInfo"></p>
-    </div>
+<div id="landingPage" class="landing-page">
+<div class="landing-logo">⚽</div>
+<h1 class="landing-title">DW <span>Imports</span></h1>
+<p class="landing-subtitle">A sua loja número 1 em camisas de time originais e de primeira linha!</p>
+<div class="landing-features">
+<div class="landing-feature"><i class="fas fa-star"></i><p>Primeira Linha</p></div>
+<div class="landing-feature"><i class="fas fa-shield-alt"></i><p>Qualidade Garantida</p></div>
+<div class="landing-feature"><i class="fas fa-truck"></i><p>Entrega Rápida</p></div>
+<div class="landing-feature"><i class="fas fa-heart"></i><p>Feito com Paixão</p></div>
 </div>
-
-<div id="admPanel" class="adm-panel">
-    <div class="adm-header">
-        <div class="adm-header-title">DW <span>Imports</span> | ADM</div>
-        <div class="header-right">
-            <div class="session-timer">Sessão: <span id="timerDisplay">30:00</span></div>
-            <button class="logout-btn" onclick="fazerLogout()">
-                <i class="fas fa-sign-out-alt"></i>
-                                Sair
-            </button>
-        </div>
-    </div>
-
-    <div class="adm-content" style="margin-top: 100px;">
-        <div class="security-banner">
-            <i class="fas fa-shield-alt"></i>
-            <span>🔐 Sessão segura ativa! Sua sessão expira automaticamente em 30 minutos.</span>
-        </div>
-
-        <div class="adm-stats">
-            <div class="stat-card">
-                <i class="fas fa-box"></i>
-                <div class="stat-number" id="totalProdutos">0</div>
-                <div class="stat-label">Produtos</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-tags"></i>
-                <div class="stat-number" id="totalCategorias">0</div>
-                <div class="stat-label">Categorias</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-warehouse"></i>
-                <div class="stat-number" id="totalEstoque">0</div>
-                <div class="stat-label">Itens em Estoque</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-shield-alt"></i>
-                <div class="stat-number" id="totalAcessos">0</div>
-                <div class="stat-label">Tentativas Bloqueadas</div>
-            </div>
-        </div>
-
-        <div class="add-product-form">
-            <h2 class="section-title">➕ Adicionar Novo Produto</h2>
-            <div class="success-msg" id="successMsg">✅ Produto adicionado com sucesso!</div>
-            <div class="error-upload" id="errorUpload"></div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Nome do Produto</label>
-                    <input type="text" id="prodNome" placeholder="Ex: Flamengo 2024">
-                </div>
-                <div class="form-group">
-                    <label>Categoria</label>
-                    <select id="prodCategoria">
-                        <option value="europeu">Times Europeus</option>
-                        <option value="brasileiro">Times Brasileiros</option>
-                        <option value="retro">Camisas Retrô</option>
-                        <option value="nba">NBA</option>
-                        <option value="selecoes">Seleções</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Preço (R$)</label>
-                    <input type="number" id="prodPreco" placeholder="Ex: 150">
-                </div>
-                <div class="form-group">
-                    <label>Estoque</label>
-                    <input type="number" id="prodEstoque" placeholder="Ex: 10">
-                </div>
-                <div class="form-group">
-                    <label>Emoji do Produto</label>
-                    <input type="text" id="prodEmoji" placeholder="Ex: 🔴⚫">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Foto do Produto</label>
-                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Clique para selecionar uma foto</p>
-                    <p style="font-size:0.8rem; margin-top:0.5rem; color:#444;">JPG, PNG até 32MB</p>
-                    <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImagem(this)">
-                    <img id="uploadPreview" class="upload-preview">
-                </div>
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-bar-fill" id="progressFill"></div>
-                </div>
-                <p class="loading-msg" id="loadingMsg">⏳ Fazendo upload da imagem...</p>
-            </div>
-            <div class="tamanhos-group">
-                <label>Tamanhos Disponíveis</label>
-                <div class="tamanhos-checkboxes">
-                    <label class="tamanho-check"><input type="checkbox" value="PP"> <span>PP</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="P"> <span>P</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="M"> <span>M</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="G"> <span>G</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="GG"> <span>GG</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="XG"> <span>XG</span></label>
-                    <label class="tamanho-check"><input type="checkbox" value="XXG"> <span>XXG</span></label>
-                </div>
-            </div>
-            <button class="add-btn" id="addBtn" onclick="adicionarProduto()">
-                <i class="fas fa-plus"></i> Adicionar Produto
-            </button>
-        </div>
-
-        <h2 class="section-title">📦 Produtos Cadastrados</h2>
-        <div class="products-table">
-            <div class="table-header">
-                <div>Produto</div>
-                <div>Categoria</div>
-                <div>Preço</div>
-                <div>Estoque</div>
-                <div>Tamanhos</div>
-                <div>Ações</div>
-            </div>
-            <div id="productsList">
-                <div class="empty-msg">Nenhum produto cadastrado ainda!</div>
-            </div>
-        </div>
-    </div>
+<div class="landing-divider"></div>
+<p class="landing-description">Bem-vindo à <strong style="color:#fff">DW Imports</strong>! Trabalhamos com os melhores times do mundo, desde os gigantes europeus até os grandes clubes brasileiros. Nossas camisas são todas de <strong style="color:#fff">primeira linha</strong>, com tecido premium e acabamento impecável!</p>
+<button class="landing-btn" onclick="entrarCatalogo()"><i class="fas fa-futbol"></i> Ver Catálogo</button>
+<div class="landing-badges">
+<span class="badge">⚽ Futebol</span>
+<span class="badge">🏀 NBA</span>
+<span class="badge">🌍 Seleções</span>
+<span class="badge">👕 Retrô</span>
+<span class="badge">🏆 Europeu</span>
+<span class="badge">🇧🇷 Brasileiro</span>
 </div>
-
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="fecharModal()">&times;</span>
-        <h2 class="modal-title">✏️ Editar Produto</h2>
-        <input type="hidden" id="editId">
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Nome do Produto</label>
-                <input type="text" id="editNome">
-            </div>
-            <div class="form-group">
-                <label>Categoria</label>
-                <select id="editCategoria">
-                    <option value="europeu">Times Europeus</option>
-                    <option value="brasileiro">Times Brasileiros</option>
-                    <option value="retro">Camisas Retrô</option>
-                    <option value="nba">NBA</option>
-                    <option value="selecoes">Seleções</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Preço (R$)</label>
-                <input type="number" id="editPreco">
-            </div>
-            <div class="form-group">
-                <label>Estoque</label>
-                <input type="number" id="editEstoque">
-            </div>
-            <div class="form-group">
-                <label>Emoji</label>
-                <input type="text" id="editEmoji">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Foto do Produto</label>
-            <div class="upload-area" onclick="document.getElementById('fileInputEdit').click()">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Clique para trocar a foto</p>
-                <input type="file" id="fileInputEdit" accept="image/*" style="display:none" onchange="previewImagemEdit(this)">
-                <img id="editPreview" class="upload-preview">
-            </div>
-            <input type="hidden" id="editImagem">
-        </div>
-        <div class="tamanhos-group">
-            <label>Tamanhos Disponíveis</label>
-            <div class="tamanhos-checkboxes" id="editTamanhos">
-                <label class="tamanho-check"><input type="checkbox" value="PP"> <span>PP</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="P"> <span>P</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="M"> <span>M</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="G"> <span>G</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="GG"> <span>GG</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="XG"> <span>XG</span></label>
-                <label class="tamanho-check"><input type="checkbox" value="XXG"> <span>XXG</span></label>
-            </div>
-        </div>
-        <button class="save-btn" onclick="salvarEdicao()">
-            <i class="fas fa-save"></i> Salvar Alterações
-        </button>
-    </div>
 </div>
-
+<div id="catalogo" class="hidden">
+<header>
+<div class="container">
+<div class="header-content">
+<a href="#" class="logo" onclick="showSection('home')">⚽ DW Imports</a>
+<nav>
+<ul>
+<li><a href="#" onclick="showSection('home')">Início</a></li>
+<li><a href="#" onclick="showSection('europeu')">Europa</a></li>
+<li><a href="#" onclick="showSection('brasileiro')">Brasil</a></li>
+<li><a href="#" onclick="showSection('retro')">Retrô</a></li>
+<li><a href="#" onclick="showSection('nba')">NBA</a></li>
+<li><a href="#" onclick="showSection('selecoes')">Seleções</a></li>
+</ul>
+</nav>
+<div class="cart-icon" onclick="toggleCart()">
+<i class="fas fa-shopping-cart"></i>
+<span class="cart-count" id="cartCount">0</span>
+</div>
+</div>
+</div>
+</header>
+<div id="cartModal" class="modal cart-modal">
+<div class="modal-content">
+<span class="close" onclick="toggleCart()">&times;</span>
+<h2 style="margin-bottom:1.5rem">🛒 Meu Carrinho</h2>
+<div id="cartItems"></div>
+<div class="total" id="cartTotal">Total: R$ 0,00</div>
+<button class="btn" onclick="showPayment()">Finalizar Compra</button>
+<div class="payment-form" id="paymentForm">
+<h3 style="margin:1rem 0;color:#888">Forma de Pagamento</h3>
+<div class="payment-methods">
+<div class="payment-method active" onclick="selectPayment(this,'Cartão')"><i class="fas fa-credit-card"></i><p>Cartão</p></div>
+<div class="payment-method" onclick="selectPayment(this,'Boleto')"><i class="fas fa-barcode"></i><p>Boleto</p></div>
+<div class="payment-method" onclick="selectPayment(this,'PIX')"><i class="fas fa-qrcode"></i><p>PIX</p></div>
+</div>
+<button class="whatsapp-btn" onclick="finalizarCompra()"><i class="fab fa-whatsapp"></i> Confirmar via WhatsApp</button>
+</div>
+</div>
+</div>
+<main>
+<div class="container">
+<section id="home">
+<div class="hero">
+<h1>⚽ DW Imports</h1>
+<p>Melhores camisas de time do mundo!</p>
+</div>
+<div class="categories">
+<div class="category" onclick="showSection('europeu')"><i class="fas fa-futbol"></i><h2>Times Europeus</h2><p>A partir de R$ 150,00</p></div>
+<div class="category" onclick="showSection('brasileiro')"><i class="fas fa-futbol"></i><h2>Times Brasileiros
+</h2><p>A partir de R$ 150,00</p></div>
+<div class="category" onclick="showSection('retro')"><i class="fas fa-tshirt"></i><h2>Camisas Retrô</h2><p>A partir de R$ 170,00</p></div>
+<div class="category" onclick="showSection('nba')"><i class="fas fa-basketball-ball"></i><h2>Camisas NBA</h2><p>A partir de R$ 160,00</p></div>
+<div class="category" onclick="showSection('selecoes')"><i class="fas fa-globe-americas"></i><h2>Seleções</h2><p>A partir de R$ 150,00</p></div>
+</div>
+</section>
+<section id="europeu" class="hidden">
+<button class="back-btn" onclick="showSection('home')">← Voltar</button>
+<h2 class="section-title">🏆 Times Europeus</h2>
+<div class="products-grid" id="grid-europeu"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+<section id="brasileiro" class="hidden">
+<button class="back-btn" onclick="showSection('home')">← Voltar</button>
+<h2 class="section-title">🇧🇷 Times Brasileiros</h2>
+<div class="products-grid" id="grid-brasileiro"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+<section id="retro" class="hidden">
+<button class="back-btn" onclick="showSection('home')">← Voltar</button>
+<h2 class="section-title">👕 Camisas Retrô</h2>
+<div class="products-grid" id="grid-retro"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+<section id="nba" class="hidden">
+<button class="back-btn" onclick="showSection('home')">← Voltar</button>
+<h2 class="section-title">🏀 Camisas NBA</h2>
+<div class="products-grid" id="grid-nba"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+<section id="selecoes" class="hidden">
+<button class="back-btn" onclick="showSection('home')">← Voltar</button>
+<h2 class="section-title">🌍 Seleções</h2>
+<div class="products-grid" id="grid-selecoes"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+</div>
+</main>
+</div>
+<script>
+let cart=[];
+let selectedPayment='Cartão';
+let todosProdutos=[];
+function entrarCatalogo(){
+document.getElementById('landingPage').classList.add('hidden');
+document.getElementById('catalogo').classList.remove('hidden');
+window.scrollTo(0,0);
+}
+function showSection(section){
+const sections=['home','europeu','brasileiro','retro','nba','selecoes'];
+sections.forEach(s=>document.getElementById(s).classList.add('hidden'));
+document.getElementById(section).classList.remove('hidden');
+const modal=document.getElementById('cartModal');
+if(modal)modal.style.display='none';
+window.scrollTo(0,0);
+}
+function toggleCart(){
+const modal=document.getElementById('cartModal');
+modal.style.display=modal.style.display==='block'?'none':'block';
+renderCart();
+}
+function addToCart(id,name,price,emoji){
+const existing=cart.find(item=>item.id===id);
+if(existing){existing.quantity++;}
+else{cart.push({id,name,price:parseFloat(price),emoji,quantity:1});}
+updateCartCount();
+alert('✅ '+name+' adicionado ao carrinho!');
+}
+function updateCartCount(){
+const total=cart.reduce((sum,item)=>sum+item.quantity,0);
+document.getElementById('cartCount').textContent=total;
+}
+function renderCart(){
+const cartItems=document.getElementById('cartItems');
+const cartTotal=document.getElementById('cartTotal');
+if(cart.length===0){
+cartItems.innerHTML='<p style="text-align:center;color:#666;padding:2rem;">🛒 Carrinho vazio!</p>';
+cartTotal.textContent='Total: R$ 0,00';
+return;
+}
+cartItems.innerHTML=cart.map((item,index)=>`
+<div class="cart-item">
+<div class="cart-item-emoji">${item.emoji}</div>
+<div class="cart-item-info">
+<strong style="color:#fff">${item.name}</strong><br>
+<span style="color:#aaa">R$ ${item.price.toFixed(2).replace('.',',')}</span>
+<div class="quantity-controls">
+<button class="quantity-btn" onclick="changeQuantity(${index},-1)">-</button>
+<span style="color:#fff">${item.quantity}</span>
+<button class="quantity-btn" onclick="changeQuantity(${index},1)">+</button>
+<button class="quantity-btn" onclick="removeItem(${index})" style="background:#333;margin-left:0.5rem">🗑</button>
+</div>
+</div>
+<strong style="color:#fff">R$ ${(item.price*item.quantity).toFixed(2).replace('.',',')}</strong>
+</div>
+`).join('');
+const total=cart.reduce((sum,item)=>sum+(item.price*item.quantity),0);
+cartTotal.textContent='Total: R$ '+total.toFixed(2).replace('.',',');
+}
+function changeQuantity(index,change){
+cart[index].quantity+=change;
+if(cart[index].quantity<=0)cart.splice(index,1);
+updateCartCount();
+renderCart();
+}
+function removeItem(index){
+cart.splice(index,1);
+updateCartCount();
+renderCart();
+}
+function showPayment(){
+if(cart.length===0){alert('❌ Carrinho vazio!');return;}
+document.getElementById('paymentForm').style.display='block';
+}
+function selectPayment(el,method){
+document.querySelectorAll('.payment-method').forEach(m=>m.classList.remove('active'));
+el.classList.add('active');
+selectedPayment=method;
+}
+function finalizarCompra(){
+if(cart.length===0){alert('❌ Carrinho vazio!');return;}
+const total=cart.reduce((sum,item)=>sum+(item.price*item.quantity),0);
+let mensagem='🛒 *Novo Pedido - DW Imports*\n\n*Itens:*\n';
+cart.forEach(item=>{
+mensagem+='• '+item.emoji+' '+item.name+' x'+item.quantity+' = R$ '+(item.price*item.quantity).toFixed(2).replace('.',',')+'\n';
+});
+mensagem+='\n*Total: R$ '+total.toFixed(2).replace('.',',')+' *';
+mensagem+='\n*Pagamento: '+selectedPayment+'*';
+mensagem+='\n\n_Pedido feito pelo site DW Imports_ 🚀';
+window.open('https://wa.me/5521979669281?text='+encodeURIComponent(mensagem),'_blank');
+}
+function renderTodasCategorias(){
+const categorias=['europeu','brasileiro','retro','nba','selecoes'];
+categorias.forEach(cat=>{
+const produtos=todosProdutos.filter(p=>p.categoria===cat);
+const grid=document.getElementById('grid-'+cat);
+if(!grid)return;
+if(produtos.length===0){
+grid.innerHTML='<div class="empty-category"><i class="fas fa-box-open"></i><p>Nenhum produto disponível ainda!</p></div>';
+return;
+}
+grid.innerHTML=produtos.map(p=>`
+<div class="product-card">
+<div class="product-image">
+${p.imagem?'<img src="'+p.imagem+'" alt="'+p.nome+'">':`<span>${p.emoji}</span>`}
+</div>
+<div class="product-info">
+<div class="product-title">${p.nome}</div>
+<div class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+<div class="product-sizes">Tamanhos: ${p.tamanhos.join(', ')}</div>
+<button class="btn" onclick="addToCart('${p.id}','${p.nome.replace(/'/g,"\\'")}',${p.preco},'${p.emoji}')">🛒 Adicionar</button>
+</div>
+</div>
+`).join('');
+});
+}
+window.onclick=function(event){
+const modal=document.getElementById('cartModal');
+if(event.target===modal)modal.style.display='none';
+}
+</script>
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
-        authDomain: "dw-imports.firebaseapp.com",
-        projectId: "dw-imports",
-        storageBucket: "dw-imports.firebasestorage.app",
-        messagingSenderId: "802077401567",
-        appId: "1:802077401567:web:d604fd84ca4abf032aa46a"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const IMGBB_API_KEY = 'cb56c979afadb3bf3bcea59156e03b55';
-    const MAX_TENTATIVAS = 3;
-    const BLOQUEIO_TEMPO = 5 * 60 * 1000;
-    const SESSAO_TEMPO = 30 * 60 * 1000;
-    let sessionTimer = null;
-    let sessionTimeLeft = SESSAO_TEMPO;
-
-    function verificarCredenciais(user, pass) {
-        return user === atob('YWRtaW4xNTEy') && pass === atob('MTUxMjk4RHVkdQ==');
-    }
-
-    window.fazerLogin = function() {
-        const bloqueio = localStorage.getItem('admBloqueio');
-        if(bloqueio && Date.now() < parseInt(bloqueio)) {
-            const restante = Math.ceil((parseInt(bloqueio) - Date.now()) / 60000);
-            mostrarBloqueio(`🔒 Acesso bloqueado! Tente novamente em ${restante} minuto(s).`);
-            return;
-        }
-        const user = document.getElementById('admUser').value.trim();
-        const pass = document.getElementById('admPass').value;
-        if(!user || !pass) {
-            document.getElementById('errorMsg').style.display = 'block';
-            document.getElementById('errorMsg').textContent = '❌ Preencha todos os campos!';
-            return;
-        }
-        if(verificarCredenciais(user, pass)) {
-            localStorage.removeItem('admTentativas');
-            localStorage.removeItem('admBloqueio');
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('admPanel').style.display = 'block';
-            iniciarSessao();
-            carregarProdutos();
-        } else {
-            let tentativas = parseInt(localStorage.getItem('admTentativas') || '0') + 1;
-            localStorage.setItem('admTentativas', tentativas);
-            if(tentativas >= MAX_TENTATIVAS) {
-                localStorage.setItem('admBloqueio', Date.now() + BLOQUEIO_TEMPO);
-                localStorage.removeItem('admTentativas');
-                mostrarBloqueio('🔒 Muitas tentativas! Acesso bloqueado por 5 minutos.');
-                document.getElementById('loginBtn').disabled = true;
-                setTimeout(() => {
-                    document.getElementById('loginBtn').disabled = false;
-                    document.getElementById('blockedMsg').style.display = 'none';
-                }, BLOQUEIO_TEMPO);
-            } else {
-                const restantes = MAX_TENTATIVAS - tentativas;
-                document.getElementById('errorMsg').style.display = 'block';
-                document.getElementById('errorMsg').textContent = '❌ Usuário ou senha incorretos!';
-                document.getElementById('tentativasInfo').textContent = `⚠️ ${restantes} tentativa(s) restante(s)`;
-            }
-        }
-    }
-
-    function mostrarBloqueio(msg) {
-        document.getElementById('errorMsg').style.display = 'none';
-        document.getElementById('blockedMsg').style.display = 'block';
-        document.getElementById('blockedMsg').textContent = msg;
-        document.getElementById('tentativasInfo').textContent = '';
-    }
-
-    function iniciarSessao() {
-        sessionTimeLeft = SESSAO_TEMPO;
-        if(sessionTimer) clearInterval(sessionTimer);
-        sessionTimer = setInterval(() => {
-            sessionTimeLeft -= 1000;
-            const minutos = Math.floor(sessionTimeLeft / 60000);
-            const segundos = Math.floor((sessionTimeLeft % 60000) / 1000);
-            document.getElementById('timerDisplay').textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
-            if(sessionTimeLeft <= 0) {
-                clearInterval(sessionTimer);
-                alert('⏰ Sessão expirada! Faça login novamente.');
-                window.fazerLogout();
-            }
-        }, 1000);
-    }
-
-    window.fazerLogout = function() {
-        if(sessionTimer) clearInterval(sessionTimer);
-        document.getElementById('loginPage').style.display = 'flex';
-        document.getElementById('admPanel').style.display = 'none';
-        document.getElementById('admUser').value = '';
-        document.getElementById('admPass').value = '';
-        document.getElementById('errorMsg').style.display = 'none';
-        document.getElementById('tentativasInfo').textContent = '';
-    }
-
-    window.previewImagem = function(input) {
-        if(input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('uploadPreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    window.previewImagemEdit = function(input) {
-        if(input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('editPreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-                        reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    async function uploadImagem(file) {
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        const loadingMsg = document.getElementById('loadingMsg');
-        progressBar.style.display = 'block';
-        loadingMsg.style.display = 'block';
-        progressFill.style.width = '30%';
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('key', IMGBB_API_KEY);
-        try {
-            progressFill.style.width = '60%';
-            const response = await fetch('https://api.imgbb.com/1/upload', {
-                method: 'POST',
-                body: formData
-            });
-            progressFill.style.width = '90%';
-            const data = await response.json();
-            progressFill.style.width = '100%';
-            loadingMsg.textContent = '✅ Upload concluído!';
-            setTimeout(() => {
-                progressBar.style.display = 'none';
-                loadingMsg.style.display = 'none';
-                progressFill.style.width = '0%';
-                loadingMsg.textContent = '⏳ Fazendo upload da imagem...';
-            }, 2000);
-            if(data.success) {
-                return data.data.url;
-            } else {
-                throw new Error('Erro no upload');
-            }
-        } catch(error) {
-            progressBar.style.display = 'none';
-            loadingMsg.style.display = 'none';
-            throw error;
-        }
-    }
-
-    async function carregarProdutos() {
-        onSnapshot(collection(db, 'produtos'), (snapshot) => {
-            const produtos = [];
-            snapshot.forEach(d => {
-                produtos.push({ id: d.id, ...d.data() });
-            });
-            renderProdutos(produtos);
-            atualizarStats(produtos);
-        });
-    }
-
-    window.adicionarProduto = async function() {
-        const nome = document.getElementById('prodNome').value;
-        const categoria = document.getElementById('prodCategoria').value;
-        const preco = document.getElementById('prodPreco').value;
-        const estoque = document.getElementById('prodEstoque').value;
-        const emoji = document.getElementById('prodEmoji').value || '👕';
-        const fileInput = document.getElementById('fileInput');
-        if(!nome || !preco || !estoque) {
-            alert('❌ Preencha pelo menos Nome, Preço e Estoque!');
-            return;
-        }
-        const tamanhosSelecionados = [];
-        document.querySelectorAll('.tamanhos-checkboxes input[type="checkbox"]:checked').forEach(cb => {
-            tamanhosSelecionados.push(cb.value);
-        });
-        if(tamanhosSelecionados.length === 0) {
-            alert('❌ Selecione pelo menos um tamanho!');
-            return;
-        }
-        const addBtn = document.getElementById('addBtn');
-        addBtn.disabled = true;
-        addBtn.textContent = '⏳ Salvando...';
-        try {
-            let imagemUrl = '';
-            if(fileInput.files && fileInput.files[0]) {
-                imagemUrl = await uploadImagem(fileInput.files[0]);
-            }
-            await addDoc(collection(db, 'produtos'), {
-                nome, categoria,
-                preco: parseFloat(preco),
-                estoque: parseInt(estoque),
-                emoji, imagem: imagemUrl,
-                tamanhos: tamanhosSelecionados,
-                criadoEm: new Date().toISOString()
-            });
-            limparFormulario();
-            const msg = document.getElementById('successMsg');
-            msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
-        } catch(error) {
-            const errorUpload = document.getElementById('errorUpload');
-            errorUpload.textContent = '❌ Erro ao salvar produto! Tente novamente.';
-            errorUpload.style.display = 'block';
-            setTimeout(() => errorUpload.style.display = 'none', 3000);
-        }
-        addBtn.disabled = false;
-        addBtn.innerHTML = '<i class="fas fa-plus"></i> Adicionar Produto';
-    }
-
-    function limparFormulario() {
-        document.getElementById('prodNome').value = '';
-        document.getElementById('prodPreco').value = '';
-        document.getElementById('prodEstoque').value = '';
-        document.getElementById('prodEmoji').value = '';
-        document.getElementById('fileInput').value = '';
-        document.getElementById('uploadPreview').style.display = 'none';
-        document.querySelectorAll('.tamanhos-checkboxes input[type="checkbox"]').forEach(cb => {
-            cb.checked = false;
-        });
-    }
-
-    function renderProdutos(produtos) {
-        const lista = document.getElementById('productsList');
-        if(produtos.length === 0) {
-            lista.innerHTML = '<div class="empty-msg">Nenhum produto cadastrado ainda!</div>';
-            return;
-        }
-        const categorias = {
-            'europeu': 'Times Europeus', 'brasileiro': 'Times Brasileiros',
-            'retro': 'Camisas Retrô', 'nba': 'NBA', 'selecoes': 'Seleções'
-        };
-        lista.innerHTML = produtos.map(p => `
-            <div class="table-row">
-                <div class="product-name">
-                    ${p.imagem ? `<img src="${p.imagem}" style="width:40px;height:40px;object-fit:cover;border-radius:5px;">` : p.emoji}
-                    ${p.nome}
-                </div>
-                <div class="product-category">${categorias[p.categoria] || p.categoria}</div>
-                <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-                <div>
-                    <span style="color: ${p.estoque > 5 ? '#4CAF50' : p.estoque > 0 ? '#FFC107' : '#ff4444'}">
-                        ${p.estoque} un.
-                    </span>
-                </div>
-                <div class="product-sizes">${p.tamanhos.join(', ')}</div>
-                <div class="action-btns">
-                    <button class="edit-btn" onclick="window.abrirEdicao('${p.id}', ${JSON.stringify(p).replace(/'/g, "\\'")})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-btn" onclick="window.deletarProduto('${p.id}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function atualizarStats(produtos) {
-        document.getElementById('totalProdutos').textContent = produtos.length;
-        const cats = new Set(produtos.map(p => p.categoria));
-        document.getElementById('totalCategorias').textContent = cats.size;
-        const estoque = produtos.reduce((sum, p) => sum + p.estoque, 0);
-        document.getElementById('totalEstoque').textContent = estoque;
-        const bloqueadas = parseInt(localStorage.getItem('admBloqueadas') || '0');
-        document.getElementById('totalAcessos').textContent = bloqueadas;
-    }
-
-    window.deletarProduto = async function(id) {
-        if(confirm('⚠️ Tem certeza que deseja deletar este produto?')) {
-            try {
-                await deleteDoc(doc(db, 'produtos', id));
-                alert('✅ Produto deletado com sucesso!');
-            } catch(error) {
-                alert('❌ Erro ao deletar produto!');
-            }
-        }
-    }
-
-    window.abrirEdicao = function(id, produto) {
-        document.getElementById('editId').value = id;
-        document.getElementById('editNome').value = produto.nome;
-        document.getElementById('editCategoria').value = produto.categoria;
-        document.getElementById('editPreco').value = produto.preco;
-        document.getElementById('editEstoque').value = produto.estoque;
-        document.getElementById('editEmoji').value = produto.emoji;
-        document.getElementById('editImagem').value = produto.imagem || '';
-        if(produto.imagem) {
-            const preview = document.getElementById('editPreview');
-            preview.src = produto.imagem;
-            preview.style.display = 'block';
-        }
-        document.querySelectorAll('#editTamanhos input[type="checkbox"]').forEach(cb => {
-            cb.checked = produto.tamanhos.includes(cb.value);
-        });
-        document.getElementById('editModal').style.display = 'block';
-    }
-
-    window.fecharModal = function() {
-        document.getElementById('editModal').style.display = 'none';
-    }
-
-    window.salvarEdicao = async function() {
-        const id = document.getElementById('editId').value;
-        const tamanhosSelecionados = [];
-        document.querySelectorAll('#editTamanhos input[type="checkbox"]:checked').forEach(cb => {
-            tamanhosSelecionados.push(cb.value);
-        });
-        if(tamanhosSelecionados.length === 0) {
-            alert('❌ Selecione pelo menos um tamanho!');
-            return;
-        }
-        try {
-            let imagemUrl = document.getElementById('editImagem').value;
-            const fileInputEdit = document.getElementById('fileInputEdit');
-            if(fileInputEdit.files && fileInputEdit.files[0]) {
-                imagemUrl = await uploadImagem(fileInputEdit.files[0]);
-            }
-            await updateDoc(doc(db, 'produtos', id), {
-                nome: document.getElementById('editNome').value,
-                categoria: document.getElementById('editCategoria').value,
-                preco: parseFloat(document.getElementById('editPreco').value),
-                estoque: parseInt(document.getElementById('editEstoque').value),
-                emoji: document.getElementById('editEmoji').value,
-                imagem: imagemUrl,
-                tamanhos: tamanhosSelecionados
-            });
-            window.fecharModal();
-            alert('✅ Produto atualizado com sucesso!');
-        } catch(error) {
-            alert('❌ Erro ao atualizar produto!');
-        }
-    }
-
-    document.getElementById('admUser').addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') window.fazerLogin();
-    });
-    document.getElementById('admPass').addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') window.fazerLogin();
-    });
-    window.onclick = function(event) {
-        if(event.target === document.getElementById('editModal')) {
-            window.fecharModal();
-        }
-    }
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import{getFirestore,collection,onSnapshot}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig={
+apiKey:"AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
+authDomain:"dw-imports.firebaseapp.com",
+projectId:"dw-imports",
+storageBucket:"dw-imports.firebasestorage.app",
+messagingSenderId:"802077401567",
+appId:"1:802077401567:web:d604fd84ca4abf032aa46a"
+};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+onSnapshot(collection(db,'produtos'),(snapshot)=>{
+todosProdutos=[];
+snapshot.forEach(doc=>{
+todosProdutos.push({id:doc.id,...doc.data()});
+});
+renderTodasCategorias();
+});
 </script>
 </body>
 </html>
