@@ -297,7 +297,7 @@ return;
 grid.innerHTML=produtos.map(p=>`
 <div class="product-card">
 <div class="product-image">
-${p.imagem?'<img src="'+p.imagem+'" alt="'+p.nome+'">':`<span>${p.emoji}</span>`}
+${p.imagem?'<img src="'+p.imagem+'" alt="'+p.nome+'" onerror="this.parentElement.innerHTML=\'<span>'+p.emoji+'</span>\'">':`<span>${p.emoji}</span>`}
 </div>
 <div class="product-info">
 <div class="product-title">${p.nome}</div>
