@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DW Imports - Rastreio</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+header{background:rgba(10,10,10,0.98);position:fixed;width:100%;top:0;z-index:1000;border-bottom:1px solid #222}
+.header-content{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;max-width:1200px;margin:0 auto}
+.logo{font-size:1.5rem;font-weight:bold;color:#fff;text-decoration:none}
+.back-link{color:#888;text-decoration:none;font-size:0.9rem;transition:color 0.3s}
+.back-link:hover{color:#fff}
+main{margin-top:80px;padding:2rem;max-width:800px;margin-left:auto;margin-right:auto}
+.hero{text-align:center;padding:3rem 0;margin-bottom:2rem}
+.hero h1{font-size:2.5rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px}
+.hero p{color:#666;font-size:1rem}
+.search-box{background:#111;border-radius:15px;padding:2rem;border:1px solid #222;margin-bottom:2rem}
+.search-box h2{margin-bottom:1.5rem;color:#fff;font-size:1.2rem;text-align:center}
+.search-form{display:flex;gap:1rem}
+.search-input{flex:1;padding:1rem;border:1px solid #333;border-radius:8px;font-size:1rem;background:#1a1a1a;color:#fff}
+.search-input:focus{outline:none;border-color:#666}
+.search-btn{padding:1rem 2rem;background:#fff;color:#000;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
+.search-btn:hover{background:#ddd}
+.resultado{display:none;background:#111;border-radius:15px;padding:2rem;border:1px solid #222}
+.resultado.show{display:block}
+.pedido-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.pedido-codigo{font-size:1.5rem;font-weight:bold;color:#fff}
+.pedido-status-badge{padding:0.6rem 1.5rem;border-radius:20px;font-size:1rem;font-weight:bold}
+.status-Confirmado{background:rgba(255,153,0,0.2);color:#ff9900;border:1px solid #ff9900}
+.status-Em-Separação{background:rgba(0,153,255,0.2);color:#0099ff;border:1px solid #0099ff}
+.status-Enviado{background:rgba(153,0,255,0.2);color:#9900ff;border:1px solid #9900ff}
+.status-Entregue{background:rgba(37,211,102,0.2);color:#25D366;border:1px solid #25D366}
+.pedido-info{background:#1a1a1a;border-radius:10px;padding:1.5rem;margin-bottom:2rem}
+.pedido-info p{color:#888;margin-bottom:0.8rem;font-size:0.95rem}
+.pedido-info p strong{color:#fff}
+.timeline{margin-top:2rem}
+.timeline h3{margin-bottom:1.5rem;color:#fff;font-size:1.1rem}
+.timeline-item{display:flex;gap:1rem;margin-bottom:1.5rem;align-items:flex-start}
+.timeline-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;border:2px solid #333;background:#1a1a1a;color:#444}
+.timeline-icon.active{border-color:#25D366;background:rgba(37,211,102,0.2);color:#25D366}
+.timeline-icon.current{border-color:#fff;background:rgba(255,255,255,0.1);color:#fff;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,0.4)}70%{box-shadow:0 0 0 10px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+.timeline-content{flex:1}
+.timeline-content h4{color:#fff;margin-bottom:0.3rem;font-size:1rem}
+.timeline-content p{color:#666;font-size:0.85rem}
+.timeline-line{width:2px;height:30px;background:#222;margin-left:19px;margin-bottom:0}
+.timeline-line.active{background:#25D366}
+.erro{display:none;text-align:center;padding:2rem;color:#ff4444}
+.erro.show{display:block}
+.erro i{font-size:3rem;margin-bottom:1rem;display:block}
+.whatsapp-btn{width:100%;padding:1rem;background:linear-gradient(45deg,#25D366,#128C7E);color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:1.5rem;text-transform:uppercase;letter-spacing:2px}
+.whatsapp-btn:hover{opacity:0.9}
+@media(max-width:768px){.search-form{flex-direction:column}.hero h1{font-size:1.8rem}.pedido-header{flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+<div class="header-content">
+<a href="index.html" class="logo">⚽ DW Imports</a>
+<a href="index.html" class="back-link">← Voltar para a Loja</a>
+</div>
+</header>
+
+<main>
+<div class="hero">
+<div style="font-size:4rem;margin-bottom:1rem">🚚</div>
+<h1>Rastrear Pedido</h1>
+<p>Digite o código do seu pedido para acompanhar em tempo real!</p>
+</div>
+
+<div class="search-box">
+<h2>🔍 Consultar Status do Pedido</h2>
+<div class="search-form">
+<input type="text" class="search-input" id="codigoInput" placeholder="Ex: DW123456" onkeypress="if(event.key==='Enter')rastrear()">
+<button class="search-btn" onclick="rastrear()">🔍 Rastrear</button>
+</div>
+</div>
+
+<div class="erro" id="erro">
+<i class="fas fa-search"></i>
+<h3>Pedido não encontrado!</h3>
+<p style="color:#666;margin-top:0.5rem">Verifique o código e tente novamente!</p>
+</div>
+
+<div class="resultado" id="resultado">
+<div class="pedido-header">
+<div class="pedido-codigo" id="res-codigo">🛒 DW123456</div>
+<div class="pedido-status-badge" id="res-status-badge">📦 Confirmado</div>
+</div>
+<div class="pedido-info">
+<p>👤 Cliente: <strong id="res-cliente"></strong></p>
+<p>📦 Produtos: <strong id="res-produtos"></strong></p>
+<p>💰 Valor: <strong id="res-valor"></strong></p>
+<p>💳 Pagamento: <strong id="res-pagamento"></strong></p>
+<p>📍 Endereço: <strong id="res-endereco"></strong></p>
+<p>📅 Data do Pedido: <strong id="res-data"></strong></p>
+</div>
+<div class="timeline">
+<h3>📍 Status do Pedido</h3>
+<div class="timeline-item">
+<div class="timeline-icon" id="icon-confirmado">📦</div>
+<div class="timeline-content">
+<h4>Pedido Confirmado</h4>
+<p>Seu pedido foi recebido e confirmado!</p>
+</div>
+</div>
+<div class="timeline-line" id="line-1"></div>
+<div class="timeline-item">
+<div class="timeline-icon" id="icon-separacao">🔄</div>
+<div class="timeline-content">
+<h4>Em Separação</h4>
+<p>Estamos separando seu pedido!</p>
+</div>
+</div>
+<div class="timeline-line" id="line-2"></div>
+<div class="timeline-item">
+<div class="timeline-icon" id="icon-enviado">🚚</div>
+<div class="timeline-content">
+<h4>Enviado</h4>
+<p>Seu pedido está a caminho!</p>
+</div>
+</div>
+<div class="timeline-line" id="line-3"></div>
+<div class="timeline-item">
+<div class="timeline-icon" id="icon-entregue">✅</div>
+<div class="timeline-content">
+<h4>Entregue</h4>
+<p>Pedido entregue com sucesso!</p>
+</div>
+</div>
+</div>
+<button class="whatsapp-btn" onclick="falarWhatsApp()">
+<i class="fab fa-whatsapp"></i> Falar com a DW Imports
+</button>
+</div>
+</main>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import{getFirestore,collection,query,where,getDocs}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyC9yWG6n_NL7voXZMnwuyieW6urrjJFWvg",
+authDomain:"dw-imports.firebaseapp.com",
+projectId:"dw-imports",
+storageBucket:"dw-imports.firebasestorage.app",
+messagingSenderId:"802077401567",
+appId:"1:802077401567:web:d604fd84ca4abf032aa46a"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
+window.rastrear=async function(){
+const codigo=document.getElementById('codigoInput').value.trim().toUpperCase();
+if(!codigo){alert('❌ Digite o código do pedido!');return;}
+document.getElementById('resultado').classList.remove('show');
+document.getElementById('erro').classList.remove('show');
+try{
+const q=query(collection(db,'pedidos'),where('codigo','==',codigo));
+const snapshot=await getDocs(q);
+if(snapshot.empty){
+document.getElementById('erro').classList.add('show');
+return;
+}
+const pedido=snapshot.docs[0].data();
+mostrarResultado(pedido);
+}catch(e){
+alert('❌ Erro ao buscar pedido!');
+}
+}
+
+function mostrarResultado(p){
+document.getElementById('res-codigo').textContent='🛒 '+p.codigo;
+document.getElementById('res-cliente').textContent=p.cliente;
+document.getElementById('res-produtos').textContent=p.produtos;
+document.getElementById('res-valor').textContent='R$ '+parseFloat(p.valor).toFixed(2).replace('.',',');
+document.getElementById('res-pagamento').textContent=p.pagamento;
+document.getElementById('res-endereco').textContent=p.endereco;
+document.getElementById('res-data').textContent=p.criadoEm?new Date(p.criadoEm.seconds*1000).toLocaleDateString('pt-BR'):'-';
+
+const statusBadge=document.getElementById('res-status-badge');
+statusBadge.textContent=getStatusEmoji(p.status)+' '+p.status;
+statusBadge.className='pedido-status-badge status-'+p.status.replace(' ','-');
+
+const statusOrder=['Confirmado','Em Separação','Enviado','Entregue'];
+const currentIdx=statusOrder.indexOf(p.status);
+
+const icons={
+'confirmado':'icon-confirmado',
+'separacao':'icon-separacao',
+'enviado':'icon-enviado',
+'entregue':'icon-entregue'
+};
+
+statusOrder.forEach((s,i)=>{
+const iconId=['icon-confirmado','icon-separacao','icon-enviado','icon-entregue'][i];
+const icon=document.getElementById(iconId);
+if(i<currentIdx){icon.classList.add('active');icon.classList.remove('current');}
+else if(i===currentIdx){icon.classList.add('current');icon.classList.remove('active');}
+else{icon.classList.remove('active');icon.classList.remove('current');}
+});
+
+['line-1','line-2','line-3'].forEach((id,i)=>{
+const line=document.getElementById(id);
+if(i<currentIdx){line.classList.add('active');}
+else{line.classList.remove('active');}
+});
+
+document.getElementById('resultado').classList.add('show');
+}
+
+function getStatusEmoji(status){
+const emojis={'Confirmado':'📦','Em Separação':'🔄','Enviado':'🚚','Entregue':'✅'};
+return emojis[status]||'📦';
+}
+
+window.falarWhatsApp=function(){
+window.open('https://wa.me/5521979669281?text=Olá! Gostaria de informações sobre meu pedido!','_blank');
+}
+</script>
+</body>
+</html>
