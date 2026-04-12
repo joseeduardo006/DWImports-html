@@ -450,7 +450,6 @@ options:{plugins:{legend:{labels:{color:'#fff'}}}}
 
 const statusCount={'Confirmado':0,'Em Separação':0,'Enviado':0,'Entregue':0};
 pedidos.forEach(p=>{if(statusCount[p.status]!==undefined)statusCount[p.status]++;});
-
 if(graficoStatus)graficoStatus.destroy();
 graficoStatus=new Chart(document.getElementById('graficoStatus'),{
 type:'doughnut',
@@ -534,8 +533,7 @@ try{
 const codigo=gerarCodigo();
 await addDoc(collection(db,'pedidos'),{codigo,cliente,whats,produtos,valor,pagamento,endereco,status:'Confirmado',criadoEm:new Date()});
 showAlert('alertPedido','✅ Pedido '+codigo+' cadastrado!','success');
-document.getElementById('pedNome').value='
-';
+document.getElementById('pedNome').value='';
 document.getElementById('pedWhats').value='';
 document.getElementById('pedProdutos').value='';
 document.getElementById('pedValor').value='';
