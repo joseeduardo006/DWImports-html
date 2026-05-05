@@ -52,9 +52,24 @@ main{margin-top:80px;padding-bottom:2rem}
 .category p{color:#666;font-size:0.9rem}
 .category-jogador{border-color:#FFD700!important}
 .category-jogador i{color:#FFD700!important}
+.liga-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem;margin-bottom:3rem}
+.liga-card{background:#111;padding:1.5rem;border-radius:15px;text-align:center;border:1px solid #222;transition:all 0.3s;cursor:pointer}
+.liga-card:hover{border-color:#555;transform:translateY(-5px);background:#1a1a1a}
+.liga-card .liga-flag{font-size:3rem;margin-bottom:0.8rem;display:block}
+.liga-card h3{font-size:1rem;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:1px}
+.liga-card p{color:#666;font-size:0.85rem}
+.liga-laliga{border-color:#ff4444!important}
+.liga-seriea{border-color:#0066cc!important}
+.liga-premier{border-color:#6600cc!important}
+.liga-ligue1{border-color:#003399!important}
+.liga-bundesliga{border-color:#ff0000!important}
+.liga-portugal{border-color:#006600!important}
+.liga-outras{border-color:#888!important}
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-bottom:3rem}
-.product-card{background:#111;border-radius:15px;overflow:hidden;border:1px solid #222;transition:all 0.3s}
+.product-card{background:#111;border-radius:15px;overflow:hidden;border:1px solid #222;transition:all 0.3s;position:relative}
 .product-card:hover{transform:translateY(-8px);border-color:#444}
+.product-card.indisponivel{opacity:0.6;pointer-events:none}
+.product-card.indisponivel::after{content:'INDISPONÍVEL';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);color:#ff4444;padding:0.5rem 1.5rem;border-radius:8px;font-weight:bold;font-size:1rem;border:2px solid #ff4444;z-index:10}
 .product-gallery{position:relative;width:100%;height:280px;background:#1a1a1a;overflow:hidden}
 .product-gallery img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;cursor:zoom-in;transition:transform 0.3s}
 .product-gallery img:hover{transform:scale(1.05)}
@@ -80,8 +95,8 @@ main{margin-top:80px;padding-bottom:2rem}
 .extra-option{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;cursor:pointer}
 .extra-option input{cursor:pointer}
 .extra-option label{color:#aaa;font-size:0.85rem;cursor:pointer}
-.nome-input{width:100%;padding:0.5rem;border:1px solid #333;border-radius:6px;background:#1a1a1a;color:#fff;font-size:0.85rem;margin-top:0.3rem}
-.nome-input:focus{outline:none;border-color:#666}
+.nome-input,.numero-input{width:100%;padding:0.5rem;border:1px solid #333;border-radius:6px;background:#1a1a1a;color:#fff;font-size:0.85rem;margin-top:0.3rem}
+.nome-input:focus,.numero-input:focus{outline:none;border-color:#666}
 .lightbox{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.95);align-items:center;justify-content:center}
 .lightbox.show{display:flex}
 .lightbox img{max-width:90%;max-height:90vh;object-fit:contain;border-radius:10px;cursor:zoom-in;transition:transform 0.3s}
@@ -111,7 +126,7 @@ main{margin-top:80px;padding-bottom:2rem}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .empty-category{text-align:center;padding:3rem;color:#666}
 .empty-category i{font-size:3rem;margin-bottom:1rem;display:block}
-@media(max-width:768px){.landing-title{font-size:2.5rem}.landing-features{gap:1.5rem}.header-content{flex-direction:column;gap:1rem}nav ul{gap:0.8rem;flex-wrap:wrap;justify-content:center}.hero h1{font-size:2rem}.categories{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.landing-title{font-size:2.5rem}.landing-features{gap:1.5rem}.header-content{flex-direction:column;gap:1rem}nav ul{gap:0.8rem;flex-wrap:wrap;justify-content:center}.hero h1{font-size:2rem}.categories{grid-template-columns:repeat(2,1fr)}.liga-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -192,6 +207,7 @@ main{margin-top:80px;padding-bottom:2rem}
 
 <main>
 <div class="container">
+
 <section id="home">
 <div class="hero">
 <h1>⚽ DW Imports</h1>
@@ -210,7 +226,57 @@ main{margin-top:80px;padding-bottom:2rem}
 <section id="europeu" class="hidden">
 <button class="back-btn" onclick="showSection('home')">← Voltar</button>
 <h2 class="section-title">🏆 Times Europeus</h2>
-<div class="products-grid" id="grid-europeu"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+<div class="liga-grid">
+<div class="liga-card liga-laliga" onclick="showSection('laliga')"><span class="liga-flag">🇪🇸</span><h3>La Liga</h3><p>Espanha</p></div>
+<div class="liga-card liga-seriea" onclick="showSection('seriea')"><span class="liga-flag">🇮🇹</span><h3>Serie A</h3><p>Itália</p></div>
+<div class="liga-card liga-premier" onclick="showSection('premier')"><span class="liga-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><h3>Premier League</h3><p>Inglaterra</p></div>
+<div class="liga-card liga-ligue1" onclick="showSection('ligue1')"><span class="liga-flag">🇫🇷</span><h3>Ligue 1</h3><p>França</p></div>
+<div class="liga-card liga-bundesliga" onclick="showSection('bundesliga')"><span class="liga-flag">🇩🇪</span><h3>Bundesliga</h3><p>Alemanha</p></div>
+<div class="liga-card liga-portugal" onclick="showSection('ligaportugal')"><span class="liga-flag">🇵🇹</span><h3>Liga Portugal</h3><p>Portugal</p></div>
+<div class="liga-card liga-outras" onclick="showSection('outrasligs')"><span class="liga-flag">🌍</span><h3>Outras Ligas</h3><p>Mundo</p></div>
+</div>
+</section>
+
+<section id="laliga" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🇪🇸 La Liga</h2>
+<div class="products-grid" id="grid-laliga"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="seriea" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🇮🇹 Serie A Itália</h2>
+<div class="products-grid" id="grid-seriea"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="premier" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</h2>
+<div class="products-grid" id="grid-premier"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="ligue1" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🇫🇷 Ligue 1</h2>
+<div class="products-grid" id="grid-ligue1"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="bundesliga" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🇩🇪 Bundesliga</h2>
+<div class="products-grid" id="grid-bundesliga"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="ligaportugal" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🇵🇹 Liga Portugal</h2>
+<div class="products-grid" id="grid-ligaportugal"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
+</section>
+
+<section id="outrasligs" class="hidden">
+<button class="back-btn" onclick="showSection('europeu')">← Voltar</button>
+<h2 class="section-title">🌍 Outras Ligas</h2>
+<div class="products-grid" id="grid-outrasligs"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
 </section>
 
 <section id="brasileiro" class="hidden">
@@ -242,6 +308,7 @@ main{margin-top:80px;padding-bottom:2rem}
 <h2 class="section-title">⭐ Versão Jogador</h2>
 <div class="products-grid" id="grid-jogador"><div class="loading-products"><i class="fas fa-spinner"></i><p>Carregando...</p></div></div>
 </section>
+
 </div>
 </main>
 </div>
@@ -260,7 +327,7 @@ window.scrollTo(0,0);
 }
 
 function showSection(section){
-const sections=['home','europeu','brasileiro','retro','nba','selecoes','jogador'];
+const sections=['home','europeu','laliga','seriea','premier','ligue1','bundesliga','ligaportugal','outrasligs','brasileiro','retro','nba','selecoes','jogador'];
 sections.forEach(s=>document.getElementById(s).classList.add('hidden'));
 document.getElementById(section).classList.remove('hidden');
 const modal=document.getElementById('cartModal');
@@ -301,9 +368,7 @@ document.getElementById('lightboxImg').src=lightboxFotos[lightboxIndex];
 document.getElementById('lightboxImg').classList.remove('zoomed');
 }
 
-function toggleZoom(img){
-img.classList.toggle('zoomed');
-}
+function toggleZoom(img){img.classList.toggle('zoomed');}
 
 function changeGallery(prodId,dir){
 const gallery=document.getElementById('gallery-'+prodId);
@@ -332,10 +397,12 @@ dots[index].classList.add('active');
 gallery.dataset.current=index;
 }
 
-function calcularPrecoTotal(p,comPatrocinio,comNome){
+function calcularPrecoTotal(p,comPatrocinio,comNome,comNumero,comPatch){
 let preco=parseFloat(p.preco||0);
 if(comPatrocinio&&p.precoPatrocinio)preco+=parseFloat(p.precoPatrocinio);
 if(comNome&&p.precoPersonalizacao)preco+=parseFloat(p.precoPersonalizacao);
+if(comNumero&&p.precoNumero)preco+=parseFloat(p.precoNumero);
+if(comPatch&&p.precoPatch)preco+=parseFloat(p.precoPatch);
 return preco;
 }
 
@@ -352,14 +419,25 @@ if(input)input.style.display=check.checked?'block':'none';
 updatePreco(prodId);
 }
 
+function toggleNumero(prodId){
+const check=document.getElementById('numero-check-'+prodId);
+const input=document.getElementById('numero-input-'+prodId);
+if(input)input.style.display=check.checked?'block':'none';
+updatePreco(prodId);
+}
+
 function updatePreco(prodId){
 const p=todosProdutos.find(x=>x.id===prodId);
 if(!p)return;
 const patrocinioEl=document.querySelector('input[name="patrocinio-'+prodId+'"]:checked');
 const nomeCheck=document.getElementById('nome-check-'+prodId);
+const numeroCheck=document.getElementById('numero-check-'+prodId);
+const patchCheck=document.getElementById('patch-check-'+prodId);
 const comPatrocinio=patrocinioEl&&patrocinioEl.value==='Com Patrocínio';
 const comNome=nomeCheck&&nomeCheck.checked;
-const total=calcularPrecoTotal(p,comPatrocinio,comNome);
+const comNumero=numeroCheck&&numeroCheck.checked;
+const comPatch=patchCheck&&patchCheck.checked;
+const total=calcularPrecoTotal(p,comPatrocinio,comNome,comNumero,comPatch);
 const el=document.getElementById('preco-total-'+prodId);
 if(el)el.textContent='Total: R$ '+total.toFixed(2).replace('.',',');
 }
@@ -376,19 +454,24 @@ const patrocinio=patrocinioEl?patrocinioEl.value:'';
 const nomeCheck=document.getElementById('nome-check-'+prodId);
 const nomeInput=document.getElementById('nome-input-'+prodId);
 const nomePersonalizado=nomeCheck&&nomeCheck.checked&&nomeInput?nomeInput.value:'';
+const numeroCheck=document.getElementById('numero-check-'+prodId);
+const numeroInput=document.getElementById('numero-input-'+prodId);
+const numero=numeroCheck&&numeroCheck.checked&&numeroInput?numeroInput.value:'';
+const patchCheck=document.getElementById('patch-check-'+prodId);
+const patch=patchCheck&&patchCheck.checked?'Sim':'';
 const comPatrocinio=patrocinio==='Com Patrocínio';
 const comNome=nomePersonalizado!=='';
-const preco=calcularPrecoTotal(p,comPatrocinio,comNome);
-addToCart(p.id,p.nome,preco,p.emoji,tamanho,patrocinio,nomePersonalizado);
+const comNumero=numero!=='';
+const comPatch=patch==='Sim';
+const preco=calcularPrecoTotal(p,comPatrocinio,comNome,comNumero,comPatch);
+addToCart(p.id,p.nome,preco,p.emoji,tamanho,patrocinio,nomePersonalizado,numero,patch);
 }
 
-function addToCart(id,name,price,emoji,tamanho,patrocinio,nomePersonalizado){
-const itemKey=id+'-'+tamanho+'-'+patrocinio+'-'+nomePersonalizado;
+function addToCart(id,name,price,emoji,tamanho,patrocinio,nomePersonalizado,numero,patch){
+const itemKey=id+'-'+tamanho+'-'+patrocinio+'-'+nomePersonalizado+'-'+numero+'-'+patch;
 const existing=cart.find(item=>item.key===itemKey);
 if(existing){existing.quantity++;}
-else{
-cart.push({key:itemKey,id,name,price:parseFloat(price),emoji,tamanho,patrocinio,nomePersonalizado,quantity:1});
-}
+else{cart.push({key:itemKey,id,name,price:parseFloat(price),emoji,tamanho,patrocinio,nomePersonalizado,numero,patch,quantity:1});}
 updateCartCount();
 alert('✅ '+name+' ('+tamanho+') adicionado ao carrinho!');
 }
@@ -414,6 +497,8 @@ cartItems.innerHTML=cart.map((item,index)=>`
 <span style="color:#aaa">Tamanho: ${item.tamanho}</span><br>
 ${item.patrocinio?'<span style="color:#aaa">Patrocínio: '+item.patrocinio+'</span><br>':''}
 ${item.nomePersonalizado?'<span style="color:#aaa">Nome: '+item.nomePersonalizado+'</span><br>':''}
+${item.numero?'<span style="color:#aaa">Número: '+item.numero+'</span><br>':''}
+${item.patch?'<span style="color:#aaa">Patch Campeão: Sim</span><br>':''}
 <span style="color:#aaa">R$ ${item.price.toFixed(2).replace('.',',')}</span>
 <div class="quantity-controls">
 <button class="quantity-btn" onclick="changeQuantity(${index},-1)">-</button>
@@ -462,6 +547,8 @@ mensagem+='• '+item.emoji+' '+item.name+'\n';
 mensagem+='  Tamanho: '+item.tamanho+'\n';
 if(item.patrocinio)mensagem+='  Patrocínio: '+item.patrocinio+'\n';
 if(item.nomePersonalizado)mensagem+='  Nome: '+item.nomePersonalizado+'\n';
+if(item.numero)mensagem+='  Número: '+item.numero+'\n';
+if(item.patch)mensagem+='  Patch Campeão: Sim\n';
 mensagem+='  Qtd: '+item.quantity+' = R$ '+(item.price*item.quantity).toFixed(2).replace('.',',')+'\n\n';
 });
 mensagem+='\n*Total: R$ '+total.toFixed(2).replace('.',',')+' *';
@@ -471,16 +558,25 @@ window.open('https://wa.me/5521979669281?text='+encodeURIComponent(mensagem),'_b
 }
 
 function renderProdutoCard(p){
+if(p.disponivel===false)return`
+<div class="product-card indisponivel">
+<div class="product-gallery"><span>${p.emoji}</span></div>
+<div class="product-info">
+<div class="product-title">${p.nome}</div>
+<div class="product-price">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
+</div>
+</div>`;
 const fotos=getFotos(p);
 const tamanhos=p.tamanhos&&p.tamanhos.length>0?p.tamanhos:['P','M','G','GG','XG','XXG','3XL','4XL'];
 const temPatrocinio=p.precoPatrocinio&&parseFloat(p.precoPatrocinio)>0;
 const temPersonalizacao=p.precoPersonalizacao&&parseFloat(p.precoPersonalizacao)>0;
+const temNumero=p.precoNumero&&parseFloat(p.precoNumero)>0;
+const temPatch=p.precoPatch&&parseFloat(p.precoPatch)>0;
 const fotosJson=JSON.stringify(fotos).replace(/"/g,'&quot;');
-return `
+return`
 <div class="product-card">
 <div class="product-gallery" id="gallery-${p.id}" data-current="0">
-${fotos.length>0?fotos.map((f,i)=>`
-<img src="${f}" alt="${p.nome}" style="display:${i===0?'block':'none'}" onclick="openLightbox(${fotosJson},${i})">`).join(''):`<span>${p.emoji}</span>`}
+${fotos.length>0?fotos.map((f,i)=>`<img src="${f}" alt="${p.nome}" style="display:${i===0?'block':'none'}" onclick="openLightbox(${fotosJson},${i})">`).join(''):`<span>${p.emoji}</span>`}
 ${fotos.length>1?`
 <button class="gallery-btn gallery-prev" onclick="changeGallery('${p.id}',-1)">❮</button>
 <button class="gallery-btn gallery-next" onclick="changeGallery('${p.id}',1)">❯</button>
@@ -505,9 +601,20 @@ ${temPatrocinio?`
 </div>`:''}
 ${temPersonalizacao?`
 <div class="extras-selector">
-<p>Personalização: <span style="color:#fff">+R$ ${parseFloat(p.precoPersonalizacao).toFixed(2).replace('.',',')}</span></p>
+<p>Nome: <span style="color:#fff">+R$ ${parseFloat(p.precoPersonalizacao).toFixed(2).replace('.',',')}</span></p>
 <label class="extra-option"><input type="checkbox" id="nome-check-${p.id}" onchange="toggleNome('${p.id}')"> Personalizar Nome</label>
 <input type="text" class="nome-input" id="nome-input-${p.id}" placeholder="Digite o nome" style="display:none">
+</div>`:''}
+${temNumero?`
+<div class="extras-selector">
+<p>Número: <span style="color:#fff">+R$ ${parseFloat(p.precoNumero).toFixed(2).replace('.',',')}</span></p>
+<label class="extra-option"><input type="checkbox" id="numero-check-${p.id}" onchange="toggleNumero('${p.id}')"> Adicionar Número</label>
+<input type="number" class="numero-input" id="numero-input-${p.id}" placeholder="Digite o número" min="1" max="99" style="display:none" onchange="updatePreco('${p.id}')">
+</div>`:''}
+${temPatch?`
+<div class="extras-selector">
+<p>Patch Campeão: <span style="color:#fff">+R$ ${parseFloat(p.precoPatch).toFixed(2).replace('.',',')}</span></p>
+<label class="extra-option"><input type="checkbox" id="patch-check-${p.id}" onchange="updatePreco('${p.id}')"> Adicionar Patch 🏆</label>
 </div>`:''}
 <div id="preco-total-${p.id}" style="font-size:1.1rem;color:#25D366;margin-bottom:1rem;font-weight:bold"></div>
 <button class="btn" onclick="adicionarAoCarrinho('${p.id}')">🛒 Adicionar</button>
@@ -516,9 +623,9 @@ ${temPersonalizacao?`
 }
 
 function renderTodasCategorias(){
-const categorias=['europeu','brasileiro','retro','nba','selecoes','jogador'];
+const categorias=['laliga','seriea','premier','ligue1','bundesliga','ligaportugal','outrasligs','europeu','brasileiro','retro','nba','selecoes','jogador'];
 categorias.forEach(cat=>{
-const produtos=todosProdutos.filter(p=>p.categoria===cat);
+const produtos=todosProdutos.filter(p=>p.categoria===cat).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
 const grid=document.getElementById('grid-'+cat);
 if(!grid)return;
 if(produtos.length===0){
@@ -558,9 +665,7 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 onSnapshot(collection(db,'produtos'),(snapshot)=>{
 todosProdutos=[];
-snapshot.forEach(doc=>{
-todosProdutos.push({id:doc.id,...doc.data()});
-});
+snapshot.forEach(doc=>{todosProdutos.push({id:doc.id,...doc.data()});});
 renderTodasCategorias();
 });
 </script>
