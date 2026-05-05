@@ -386,51 +386,41 @@ const mes=new Date(p.criadoEm.seconds*1000).getMonth();
 vendasPorMes[mes]+=parseFloat(p.valor||0);
 }
 });
-
 const mesAtual=new Date().getMonth();
 document.getElementById('totalMes').textContent='R$ '+vendasPorMes[mesAtual].toFixed(2).replace('.',',');
-
 const melhorMesIdx=vendasPorMes.indexOf(Math.max(...vendasPorMes));
 document.getElementById('melhorMes').textContent=meses[melhorMesIdx];
-
 const mesAnterior=mesAtual>0?mesAtual-1:11;
 const tendencia=vendasPorMes[mesAtual]>=vendasPorMes[mesAnterior]?'📈 Subindo':'📉 Caindo';
 document.getElementById('tendencia').textContent=tendencia;
-
 if(graficoVendas)graficoVendas.destroy();
 graficoVendas=new Chart(document.getElementById('graficoVendas'),{
 type:'line',
 data:{labels:meses,datasets:[{label:'Vendas (R$)',data:vendasPorMes,borderColor:'#25D366',backgroundColor:'rgba(37,211,102,0.1)',tension:0.4,fill:true}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#888'}},y:{ticks:{color:'#888'}}}}
 });
-
 const produtosCount={};
 pedidos.forEach(p=>{
 const nome=p.produtos||'Outros';
 produtosCount[nome]=(produtosCount[nome]||0)+1;
 });
 const topProdutos=Object.entries(produtosCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
 if(graficoProdutos)graficoProdutos.destroy();
 graficoProdutos=new Chart(document.getElementById('graficoProdutos'),{
 type:'bar',
 data:{labels:topProdutos.map(p=>p[0].substring(0,15)),datasets:[{label:'Vendas',data:topProdutos.map(p=>p[1]),backgroundColor:'rgba(255,153,0,0.7)'}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#888'}},y:{ticks:{color:'#888'}}}}
 });
-
 const pagamentos={};
 pedidos.forEach(p=>{pagamentos[p.pagamento]=(pagamentos[p.pagamento]||0)+1;});
-
 if(graficoPagamento)graficoPagamento.destroy();
 graficoPagamento=new Chart(document.getElementById('graficoPagamento'),{
 type:'doughnut',
 data:{labels:Object.keys(pagamentos),datasets:[{data:Object.values(pagamentos),backgroundColor:['#25D366','#0099ff','#ff9900']}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}}}
 });
-
 const statusCount={'Confirmado':0,'Em Separação':0,'Enviado':0,'Entregue':0};
 pedidos.forEach(p=>{if(statusCount[p.status]!==undefined)statusCount[p.status]++;});
-
 if(graficoStatus)graficoStatus.destroy();
 graficoStatus=new Chart(document.getElementById('graficoStatus'),{
 type:'doughnut',
