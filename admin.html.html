@@ -26,6 +26,8 @@ body{font-family:Arial,sans-serif;background:#0a0a0a;color:#fff}
 .btn-success:hover{background:#128C7E}
 .btn-warning{background:#ff9900;color:#fff}
 .btn-warning:hover{background:#cc7700}
+.btn-edit{background:#9900ff;color:#fff}
+.btn-edit:hover{background:#7700cc}
 header{background:rgba(10,10,10,0.98);position:fixed;width:100%;top:0;z-index:1000;border-bottom:1px solid #222}
 .header-content{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem}
 .logo{font-size:1.5rem;font-weight:bold;color:#fff}
@@ -43,13 +45,14 @@ main{margin-top:80px;padding:2rem}
 .sizes-grid{display:flex;gap:0.5rem;flex-wrap:wrap}
 .size-btn{padding:0.5rem 1rem;border:1px solid #333;border-radius:8px;background:#1a1a1a;color:#888;cursor:pointer;transition:all 0.3s}
 .size-btn.active{border-color:#fff;color:#fff;background:#222}
-.product-list{display:flex;flex-direction:column;gap:1rem;max-height:600px;overflow-y:auto}
-.product-item{display:flex;gap:1rem;padding:1rem;background:#1a1a1a;border-radius:10px;border:1px solid #222;align-items:center}
+.product-list{display:flex;flex-direction:column;gap:1rem;max-height:700px;overflow-y:auto}
+.product-item{display:flex;gap:1rem;padding:1rem;background:#1a1a1a;border-radius:10px;border:1px solid #222;align-items:center;flex-wrap:wrap}
 .product-item-image{width:60px;height:60px;border-radius:8px;background:#333;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden}
 .product-item-image img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .product-item-info{flex:1}
 .product-item-info h3{font-size:1rem;margin-bottom:0.3rem}
 .product-item-info p{color:#666;font-size:0.85rem}
+.product-item-actions{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
 .alert{padding:1rem;border-radius:8px;margin-bottom:1rem;text-align:center}
 .alert-success{background:rgba(37,211,102,0.2);border:1px solid #25D366;color:#25D366}
 .alert-error{background:rgba(255,68,68,0.2);border:1px solid #ff4444;color:#ff4444}
@@ -79,6 +82,14 @@ main{margin-top:80px;padding:2rem}
 .resumo-card h3{font-size:1.8rem;margin-bottom:0.5rem;color:#25D366}
 .resumo-card p{color:#666;font-size:0.85rem}
 .resumo-card.destaque{border-color:#25D366}
+.disponivel-badge{padding:0.3rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:bold}
+.disponivel-sim{background:rgba(37,211,102,0.2);color:#25D366;border:1px solid #25D366}
+.disponivel-nao{background:rgba(255,68,68,0.2);color:#ff4444;border:1px solid #ff4444}
+.modal-edit{display:none;position:fixed;z-index:3000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85);overflow-y:auto}
+.modal-edit-content{background:#111;margin:2% auto;padding:2rem;border-radius:15px;width:90%;max-width:600px;border:1px solid #222}
+.modal-edit-content h2{margin-bottom:1.5rem;color:#fff}
+.modal-close{color:#666;float:right;font-size:28px;cursor:pointer}
+.modal-close:hover{color:#fff}
 @media(max-width:768px){.adm-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.grafico-grid{grid-template-columns:1fr}.resumo-grid{grid-template-columns:1fr}.tab{padding:0.8rem 1rem;font-size:0.8rem}}
 </style>
 </head>
@@ -99,6 +110,64 @@ main{margin-top:80px;padding:2rem}
 </div>
 </div>
 
+<div id="modalEdit" class="modal-edit">
+<div class="modal-edit-content">
+<span class="modal-close" onclick="fecharModalEdit()">×</span>
+<h2>✏️ Editar Produto</h2>
+<div id="alertEdit"></div>
+<div class="form-group"><label>Nome</label><input type="text" id="editNome"></div>
+<div class="form-group">
+<label>Categoria</label>
+<select id="editCategoria">
+<option value="laliga">🇪🇸 La Liga</option>
+<option value="seriea">🇮🇹 Serie A Itália</option>
+<option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+<option value="ligue1">🇫🇷 Ligue 1</option>
+<option value="bundesliga">🇩🇪 Bundesliga</option>
+<option value="ligaportugal">🇵🇹 Liga Portugal</option>
+<option value="outrasligs">🌍 Outras Ligas</option>
+<option value="brasileiro">🇧🇷 Times Brasileiros</option>
+<option value="retro">👕 Camisas Retrô</option>
+<option value="nba">🏀 NBA</option>
+<option value="selecoes">🌍 Seleções</option>
+<option value="jogador">⭐ Versão Jogador</option>
+</select>
+</div>
+<div class="form-group"><label>Preço Base (R$)</label><input type="number" id="editPreco"></div>
+<div class="form-group"><label>Preço Patrocínio (R$)</label><input type="number" id="editPrecoPatrocinio"></div>
+<div class="form-group"><label>Preço Nome (R$)</label><input type="number" id="editPrecoPersonalizacao"></div>
+<div class="form-group"><label>Preço Número (R$)</label><input type="number" id="editPrecoNumero"></div>
+<div class="form-group"><label>Preço Patch Campeão (R$)</label><input type="number" id="editPrecoPatch"></div>
+<div class="form-group"><label>Estoque</label><input type="number" id="editEstoque"></div>
+<div class="form-group"><label>Ordem (1 = primeiro)</label><input type="number" id="editOrdem" placeholder="Ex: 1"></div>
+<div class="form-group"><label>Foto 1 (URL)</label><input type="text" id="editFoto1"></div>
+<div class="form-group"><label>Foto 2 (URL)</label><input type="text" id="editFoto2"></div>
+<div class="form-group"><label>Foto 3 (URL)</label><input type="text" id="editFoto3"></div>
+<div class="form-group">
+<label>Disponível</label>
+<select id="editDisponivel">
+<option value="true">✅ Disponível</option>
+<option value="false">❌ Indisponível</option>
+</select>
+</div>
+<div class="form-group">
+<label>Tamanhos</label>
+<div class="sizes-grid" id="editSizes">
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">P</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">M</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">G</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">GG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">XG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">XXG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">3XL</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">4XL</button>
+</div>
+</div>
+<input type="hidden" id="editId">
+<button class="btn btn-success" onclick="salvarEdicao()">💾 Salvar Alterações</button>
+</div>
+</div>
+
 <div id="admPage" class="hidden">
 <header>
 <div class="header-content">
@@ -116,9 +185,9 @@ main{margin-top:80px;padding:2rem}
 </div>
 
 <div class="tabs">
-<div class="tab active" onclick="showTab('produtos')">📦 Produtos</div>
-<div class="tab" onclick="showTab('pedidos')">🚚 Pedidos</div>
-<div class="tab" onclick="showTab('graficos')">📊 Relatórios</div>
+<div class="tab active" onclick="showTab('produtos',this)">📦 Produtos</div>
+<div class="tab" onclick="showTab('pedidos',this)">🚚 Pedidos</div>
+<div class="tab" onclick="showTab('graficos',this)">📊 Relatórios</div>
 </div>
 
 <div id="tab-produtos" class="tab-content active">
@@ -133,12 +202,18 @@ main{margin-top:80px;padding:2rem}
 <div class="form-group">
 <label>Categoria</label>
 <select id="prodCategoria">
-<option value="europeu">Times Europeus</option>
-<option value="brasileiro">Times Brasileiros</option>
-<option value="retro">Camisas Retrô</option>
-<option value="nba">NBA</option>
-<option value="selecoes">Seleções</option>
-<option value="jogador">Versão Jogador</option>
+<option value="laliga">🇪🇸 La Liga</option>
+<option value="seriea">🇮🇹 Serie A Itália</option>
+<option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+<option value="ligue1">🇫🇷 Ligue 1</option>
+<option value="bundesliga">🇩🇪 Bundesliga</option>
+<option value="ligaportugal">🇵🇹 Liga Portugal</option>
+<option value="outrasligs">🌍 Outras Ligas</option>
+<option value="brasileiro">🇧🇷 Times Brasileiros</option>
+<option value="retro">👕 Camisas Retrô</option>
+<option value="nba">🏀 NBA</option>
+<option value="selecoes">🌍 Seleções</option>
+<option value="jogador">⭐ Versão Jogador</option>
 </select>
 </div>
 <div class="form-group">
@@ -146,16 +221,28 @@ main{margin-top:80px;padding:2rem}
 <input type="number" id="prodPreco" placeholder="Ex: 150">
 </div>
 <div class="form-group">
-<label>Preço Adicional - Com Patrocínio (R$)</label>
+<label>Preço Adicional - Patrocínio (R$)</label>
 <input type="number" id="prodPrecoPatrocinio" placeholder="Ex: 20 (0 para não ter)">
 </div>
 <div class="form-group">
-<label>Preço Adicional - Personalização Nome (R$)</label>
+<label>Preço Adicional - Nome (R$)</label>
 <input type="number" id="prodPrecoPersonalizacao" placeholder="Ex: 15 (0 para não ter)">
+</div>
+<div class="form-group">
+<label>Preço Adicional - Número (R$)</label>
+<input type="number" id="prodPrecoNumero" placeholder="Ex: 10 (0 para não ter)">
+</div>
+<div class="form-group">
+<label>Preço Adicional - Patch Campeão (R$)</label>
+<input type="number" id="prodPrecoPatch" placeholder="Ex: 15 (0 para não ter)">
 </div>
 <div class="form-group">
 <label>Estoque</label>
 <input type="number" id="prodEstoque" placeholder="Ex: 10">
+</div>
+<div class="form-group">
+<label>Ordem (1 = primeiro)</label>
+<input type="number" id="prodOrdem" placeholder="Ex: 1">
 </div>
 <div class="form-group">
 <label>Emoji</label>
@@ -184,15 +271,15 @@ main{margin-top:80px;padding:2rem}
 </div>
 <div class="form-group">
 <label>Tamanhos</label>
-<div class="sizes-grid">
-<button class="size-btn" onclick="toggleSize(this)">P</button>
-<button class="size-btn" onclick="toggleSize(this)">M</button>
-<button class="size-btn" onclick="toggleSize(this)">G</button>
-<button class="size-btn" onclick="toggleSize(this)">GG</button>
-<button class="size-btn" onclick="toggleSize(this)">XG</button>
-<button class="size-btn" onclick="toggleSize(this)">XXG</button>
-<button class="size-btn" onclick="toggleSize(this)">3XL</button>
-<button class="size-btn" onclick="toggleSize(this)">4XL</button>
+<div class="sizes-grid" id="addSizes">
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">P</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">M</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">G</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">GG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">XG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">XXG</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">3XL</button>
+<button type="button" class="size-btn" onclick="this.classList.toggle('active')">4XL</button>
 </div>
 </div>
 <button class="btn" onclick="adicionarProduto()">➕ Adicionar Produto</button>
@@ -309,25 +396,53 @@ function gerarCodigo(){
 return 'DW'+Date.now().toString().slice(-6);
 }
 
+function getNomeCategoria(cat){
+const cats={
+'laliga':'🇪🇸 La Liga',
+'seriea':'🇮🇹 Serie A',
+'premier':'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League',
+'ligue1':'🇫🇷 Ligue 1',
+'bundesliga':'🇩🇪 Bundesliga',
+'ligaportugal':'🇵🇹 Liga Portugal',
+'outrasligs':'🌍 Outras Ligas',
+'brasileiro':'🇧🇷 Brasileiros',
+'retro':'👕 Retrô',
+'nba':'🏀 NBA',
+'selecoes':'🌍 Seleções',
+'jogador':'⭐ Versão Jogador',
+'europeu':'🏆 Europeu'
+};
+return cats[cat]||cat;
+}
+
 function renderProdutos(){
 const list=document.getElementById('productList');
 if(produtos.length===0){
 list.innerHTML='<p style="color:#666;text-align:center;padding:2rem">Nenhum produto!</p>';
 return;
 }
-list.innerHTML=produtos.map(p=>`
+const produtosOrdenados=[...produtos].sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+list.innerHTML=produtosOrdenados.map(p=>`
 <div class="product-item">
 <div class="product-item-image">
 ${p.foto1?`<img src="${p.foto1}" alt="${p.nome}">`:(p.imagem?`<img src="${p.imagem}" alt="${p.nome}">`:`<span>${p.emoji}</span>`)}
 </div>
 <div class="product-item-info">
-<h3>${p.nome}</h3>
-<p>R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')} | ${p.categoria} | Estoque: ${p.estoque}</p>
+<h3>${p.nome} <span class="disponivel-badge ${p.disponivel===false?'disponivel-nao':'disponivel-sim'}">${p.disponivel===false?'❌ Indisponível':'✅ Disponível'}</span></h3>
+<p>${getNomeCategoria(p.categoria)} | R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')} | Estoque: ${p.estoque} | Ordem: ${p.ordem||'-'}</p>
 <p>Tamanhos: ${p.tamanhos?p.tamanhos.join(', '):'-'}</p>
 ${p.precoPatrocinio>0?`<p>Patrocínio: +R$ ${parseFloat(p.precoPatrocinio).toFixed(2).replace('.',',')}</p>`:''}
-${p.precoPersonalizacao>0?`<p>Personalização: +R$ ${parseFloat(p.precoPersonalizacao).toFixed(2).replace('.',',')}</p>`:''}
+${p.precoPersonalizacao>0?`<p>Nome: +R$ ${parseFloat(p.precoPersonalizacao).toFixed(2).replace('.',',')}</p>`:''}
+${p.precoNumero>0?`<p>Número: +R$ ${parseFloat(p.precoNumero).toFixed(2).replace('.',',')}</p>`:''}
+${p.precoPatch>0?`<p>Patch: +R$ ${parseFloat(p.precoPatch).toFixed(2).replace('.',',')}</p>`:''}
+<div class="product-item-actions">
+<button class="btn btn-small btn-edit" onclick="window.abrirModalEdit('${p.id}')">✏️ Editar</button>
+<button class="btn btn-small ${p.disponivel===false?'btn-success':'btn-warning'}" onclick="window.toggleDisponivel('${p.id}',${p.disponivel!==false})">
+${p.disponivel===false?'✅ Ativar':'❌ Desativar'}
+</button>
+<button class="btn btn-small btn-danger" onclick="window.deletarProduto('${p.id}')">🗑 Deletar</button>
 </div>
-<button class="btn btn-small btn-danger" onclick="window.deletarProduto('${p.id}')">🗑</button>
+</div>
 </div>
 `).join('');
 }
@@ -445,11 +560,11 @@ document.getElementById('username').value='';
 document.getElementById('password').value='';
 }
 
-window.showTab=function(tab){
+window.showTab=function(tab,el){
 document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
 document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
 document.getElementById('tab-'+tab).classList.add('active');
-event.target.classList.add('active');
+el.classList.add('active');
 if(tab==='graficos')setTimeout(atualizarGraficos,100);
 }
 
@@ -459,8 +574,67 @@ document.querySelectorAll('.emoji-option').forEach(e=>e.classList.remove('active
 event.target.classList.add('active');
 }
 
-window.toggleSize=function(btn){
-btn.classList.toggle('active');
+window.abrirModalEdit=function(id){
+const p=produtos.find(x=>x.id===id);
+if(!p)return;
+document.getElementById('editId').value=p.id;
+document.getElementById('editNome').value=p.nome||'';
+document.getElementById('editCategoria').value=p.categoria||'laliga';
+document.getElementById('editPreco').value=p.preco||'';
+document.getElementById('editPrecoPatrocinio').value=p.precoPatrocinio||0;
+document.getElementById('editPrecoPersonalizacao').value=p.precoPersonalizacao||0;
+document.getElementById('editPrecoNumero').value=p.precoNumero||0;
+document.getElementById('editPrecoPatch').value=p.precoPatch||0;
+document.getElementById('editEstoque').value=p.estoque||'';
+document.getElementById('editOrdem').value=p.ordem||'';
+document.getElementById('editFoto1').value=p.foto1||'';
+document.getElementById('editFoto2').value=p.foto2||'';
+document.getElementById('editFoto3').value=p.foto3||'';
+document.getElementById('editDisponivel').value=p.disponivel===false?'false':'true';
+const tamanhos=p.tamanhos||[];
+document.querySelectorAll('#editSizes .size-btn').forEach(btn=>{
+btn.classList.toggle('active',tamanhos.includes(btn.textContent.trim()));
+});
+document.getElementById('modalEdit').style.display='block';
+}
+
+window.fecharModalEdit=function(){
+document.getElementById('modalEdit').style.display='none';
+}
+
+window.salvarEdicao=async function(){
+const id=document.getElementById('editId').value;
+const nome=document.getElementById('editNome').value.trim();
+const categoria=document.getElementById('editCategoria').value;
+const preco=parseFloat(document.getElementById('editPreco').value);
+const precoPatrocinio=parseFloat(document.getElementById('editPrecoPatrocinio').value)||0;
+const precoPersonalizacao=parseFloat(document.getElementById('editPrecoPersonalizacao').value)||0;
+const precoNumero=parseFloat(document.getElementById('editPrecoNumero').value)||0;
+const precoPatch=parseFloat(document.getElementById('editPrecoPatch').value)||0;
+const estoque=parseInt(document.getElementById('editEstoque').value);
+const ordem=parseInt(document.getElementById('editOrdem').value)||999;
+const foto1=document.getElementById('editFoto1').value.trim();
+const foto2=document.getElementById('editFoto2').value.trim();
+const foto3=document.getElementById('editFoto3').value.trim();
+const disponivel=document.getElementById('editDisponivel').value==='true';
+const tamanhos=Array.from(document.querySelectorAll('#editSizes .size-btn.active')).map(b=>b.textContent.trim());
+if(!nome||!preco||!estoque){
+showAlert('alertEdit','❌ Preencha todos os campos!','error');return;
+}
+try{
+await updateDoc(doc(db,'produtos',id),{
+nome,categoria,preco,precoPatrocinio,precoPersonalizacao,
+precoNumero,precoPatch,estoque,ordem,foto1,foto2,foto3,disponivel,tamanhos
+});
+showAlert('alertEdit','✅ Produto atualizado!','success');
+setTimeout(()=>fecharModalEdit(),1500);
+}catch(e){showAlert('alertEdit','❌ Erro ao atualizar!','error');}
+}
+
+window.toggleDisponivel=async function(id,desativar){
+try{
+await updateDoc(doc(db,'produtos',id),{disponivel:!desativar});
+}catch(e){alert('❌ Erro ao atualizar!');}
 }
 
 window.adicionarProduto=async function(){
@@ -469,48 +643,54 @@ const categoria=document.getElementById('prodCategoria').value;
 const preco=parseFloat(document.getElementById('prodPreco').value);
 const precoPatrocinio=parseFloat(document.getElementById('prodPrecoPatrocinio').value)||0;
 const precoPersonalizacao=parseFloat(document.getElementById('prodPrecoPersonalizacao').value)||0;
+const precoNumero=parseFloat(document.getElementById('prodPrecoNumero').value)||0;
+const precoPatch=parseFloat(document.getElementById('prodPrecoPatch').value)||0;
 const estoque=parseInt(document.getElementById('prodEstoque').value);
+const ordem=parseInt(document.getElementById('prodOrdem').value)||999;
 const emoji=document.getElementById('prodEmoji').value||'⚽';
 const foto1=document.getElementById('prodFoto1').value.trim();
 const foto2=document.getElementById('prodFoto2').value.trim();
 const foto3=document.getElementById('prodFoto3').value.trim();
-const tamanhosBtns=document.querySelectorAll('.size-btn.active');
-const tamanhos=Array.from(tamanhosBtns).map(b=>b.textContent);
+const tamanhos=Array.from(document.querySelectorAll('#addSizes .size-btn.active')).map(b=>b.textContent.trim());
 if(!nome||!preco||!estoque||tamanhos.length===0){
 showAlert('alertMsg','❌ Preencha todos os campos!','error');return;
 }
 try{
 await addDoc(collection(db,'produtos'),{
 nome,categoria,preco,precoPatrocinio,precoPersonalizacao,
-estoque,emoji,foto1,foto2,foto3,tamanhos,criadoEm:new Date()
+precoNumero,precoPatch,estoque,ordem,emoji,foto1,foto2,foto3,
+tamanhos,disponivel:true,criadoEm:new Date()
 });
 showAlert('alertMsg','✅ Produto adicionado!','success');
 document.getElementById('prodNome').value='';
 document.getElementById('prodPreco').value='';
 document.getElementById('prodPrecoPatrocinio').value='';
 document.getElementById('prodPrecoPersonalizacao').value='';
+document.getElementById('prodPrecoNumero').value='';
+document.getElementById('prodPrecoPatch').value='';
 document.getElementById('prodEstoque').value='';
+document.getElementById('prodOrdem').value='';
 document.getElementById('prodEmoji').value='⚽';
 document.getElementById('prodFoto1').value='';
 document.getElementById('prodFoto2').value='';
 document.getElementById('prodFoto3').value='';
-document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('#addSizes .size-btn').forEach(b=>b.classList.remove('active'));
 }catch(e){showAlert('alertMsg','❌ Erro ao adicionar!','error');}
 }
 
 window.adicionarPedido=async function(){
 const cliente=document.getElementById('pedNome').value.trim();
 const whats=document.getElementById('pedWhats').value.trim();
-const produtos=document.getElementById('pedProdutos').value.trim();
+const prods=document.getElementById('pedProdutos').value.trim();
 const valor=parseFloat(document.getElementById('pedValor').value);
 const pagamento=document.getElementById('pedPagamento').value;
 const endereco=document.getElementById('pedEndereco').value.trim();
-if(!cliente||!produtos||!valor||!endereco){
+if(!cliente||!prods||!valor||!endereco){
 showAlert('alertPedido','❌ Preencha todos os campos!','error');return;
 }
 try{
 const codigo=gerarCodigo();
-await addDoc(collection(db,'pedidos'),{codigo,cliente,whats,produtos,valor,pagamento,endereco,status:'Confirmado',criadoEm:new Date()});
+await addDoc(collection(db,'pedidos'),{codigo,cliente,whats,produtos:prods,valor,pagamento,endereco,status:'Confirmado',criadoEm:new Date()});
 showAlert('alertPedido','✅ Pedido '+codigo+' cadastrado!','success');
 document.getElementById('pedNome').value='';
 document.getElementById('pedWhats').value='';
@@ -543,6 +723,11 @@ function showAlert(id,msg,type){
 const el=document.getElementById(id);
 el.innerHTML=`<div class="alert alert-${type}">${msg}</div>`;
 setTimeout(()=>el.innerHTML='',3000);
+}
+
+window.onclick=function(event){
+const modal=document.getElementById('modalEdit');
+if(event.target===modal)fecharModalEdit();
 }
 </script>
 </body>
