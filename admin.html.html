@@ -109,22 +109,10 @@ main{margin-top:80px;padding:2rem}
 <main>
 <div class="container">
 <div class="stats">
-<div class="stat-card">
-<h3 id="totalProdutos">0</h3>
-<p>Produtos</p>
-</div>
-<div class="stat-card">
-<h3 id="totalPedidos">0</h3>
-<p>Pedidos</p>
-</div>
-<div class="stat-card">
-<h3 id="totalVendas">R$0</h3>
-<p>Total Vendas</p>
-</div>
-<div class="stat-card">
-<h3>✅</h3>
-<p>Online</p>
-</div>
+<div class="stat-card"><h3 id="totalProdutos">0</h3><p>Produtos</p></div>
+<div class="stat-card"><h3 id="totalPedidos">0</h3><p>Pedidos</p></div>
+<div class="stat-card"><h3 id="totalVendas">R$0</h3><p>Total Vendas</p></div>
+<div class="stat-card"><h3>✅</h3><p>Online</p></div>
 </div>
 
 <div class="tabs">
@@ -150,11 +138,20 @@ main{margin-top:80px;padding:2rem}
 <option value="retro">Camisas Retrô</option>
 <option value="nba">NBA</option>
 <option value="selecoes">Seleções</option>
+<option value="jogador">Versão Jogador</option>
 </select>
 </div>
 <div class="form-group">
-<label>Preço (R$)</label>
+<label>Preço Base (R$)</label>
 <input type="number" id="prodPreco" placeholder="Ex: 150">
+</div>
+<div class="form-group">
+<label>Preço Adicional - Com Patrocínio (R$)</label>
+<input type="number" id="prodPrecoPatrocinio" placeholder="Ex: 20 (0 para não ter)">
+</div>
+<div class="form-group">
+<label>Preço Adicional - Personalização Nome (R$)</label>
+<input type="number" id="prodPrecoPersonalizacao" placeholder="Ex: 15 (0 para não ter)">
 </div>
 <div class="form-group">
 <label>Estoque</label>
@@ -170,21 +167,32 @@ main{margin-top:80px;padding:2rem}
 <span class="emoji-option" onclick="selecionarEmoji('🏆')">🏆</span>
 <span class="emoji-option" onclick="selecionarEmoji('🌍')">🌍</span>
 <span class="emoji-option" onclick="selecionarEmoji('🇧🇷')">🇧🇷</span>
+<span class="emoji-option" onclick="selecionarEmoji('⭐')">⭐</span>
 </div>
 </div>
 <div class="form-group">
-<label>URL da Imagem (opcional)</label>
-<input type="text" id="prodImagem" placeholder="https://...">
+<label>📸 Foto 1 (URL)</label>
+<input type="text" id="prodFoto1" placeholder="https://...">
+</div>
+<div class="form-group">
+<label>📸 Foto 2 (URL)</label>
+<input type="text" id="prodFoto2" placeholder="https://...">
+</div>
+<div class="form-group">
+<label>📸 Foto 3 (URL)</label>
+<input type="text" id="prodFoto3" placeholder="https://...">
 </div>
 <div class="form-group">
 <label>Tamanhos</label>
 <div class="sizes-grid">
-<button class="size-btn" onclick="toggleSize(this,'PP')">PP</button>
-<button class="size-btn" onclick="toggleSize(this,'P')">P</button>
-<button class="size-btn" onclick="toggleSize(this,'M')">M</button>
-<button class="size-btn" onclick="toggleSize(this,'G')">G</button>
-<button class="size-btn" onclick="toggleSize(this,'GG')">GG</button>
-<button class="size-btn" onclick="toggleSize(this,'XGG')">XGG</button>
+<button class="size-btn" onclick="toggleSize(this)">P</button>
+<button class="size-btn" onclick="toggleSize(this)">M</button>
+<button class="size-btn" onclick="toggleSize(this)">G</button>
+<button class="size-btn" onclick="toggleSize(this)">GG</button>
+<button class="size-btn" onclick="toggleSize(this)">XG</button>
+<button class="size-btn" onclick="toggleSize(this)">XXG</button>
+<button class="size-btn" onclick="toggleSize(this)">3XL</button>
+<button class="size-btn" onclick="toggleSize(this)">4XL</button>
 </div>
 </div>
 <button class="btn" onclick="adicionarProduto()">➕ Adicionar Produto</button>
@@ -244,36 +252,15 @@ main{margin-top:80px;padding:2rem}
 
 <div id="tab-graficos" class="tab-content">
 <div class="resumo-grid">
-<div class="resumo-card destaque">
-<h3 id="totalMes">R$ 0</h3>
-<p>Vendas este Mês</p>
-</div>
-<div class="resumo-card">
-<h3 id="melhorMes">-</h3>
-<p>Melhor Mês</p>
-</div>
-<div class="resumo-card">
-<h3 id="tendencia">-</h3>
-<p>Tendência</p>
-</div>
+<div class="resumo-card destaque"><h3 id="totalMes">R$ 0</h3><p>Vendas este Mês</p></div>
+<div class="resumo-card"><h3 id="melhorMes">-</h3><p>Melhor Mês</p></div>
+<div class="resumo-card"><h3 id="tendencia">-</h3><p>Tendência</p></div>
 </div>
 <div class="grafico-grid">
-<div class="grafico-card">
-<h3>📈 Vendas por Mês</h3>
-<canvas id="graficoVendas"></canvas>
-</div>
-<div class="grafico-card">
-<h3>🏆 Produtos Mais Vendidos</h3>
-<canvas id="graficoProdutos"></canvas>
-</div>
-<div class="grafico-card">
-<h3>💳 Formas de Pagamento</h3>
-<canvas id="graficoPagamento"></canvas>
-</div>
-<div class="grafico-card">
-<h3>📦 Pedidos por Status</h3>
-<canvas id="graficoStatus"></canvas>
-</div>
+<div class="grafico-card"><h3>📈 Vendas por Mês</h3><canvas id="graficoVendas"></canvas></div>
+<div class="grafico-card"><h3>🏆 Produtos Mais Vendidos</h3><canvas id="graficoProdutos"></canvas></div>
+<div class="grafico-card"><h3>💳 Formas de Pagamento</h3><canvas id="graficoPagamento"></canvas></div>
+<div class="grafico-card"><h3>📦 Pedidos por Status</h3><canvas id="graficoStatus"></canvas></div>
 </div>
 </div>
 </div>
@@ -331,12 +318,14 @@ return;
 list.innerHTML=produtos.map(p=>`
 <div class="product-item">
 <div class="product-item-image">
-${p.imagem?`<img src="${p.imagem}" alt="${p.nome}">`:`<span>${p.emoji}</span>`}
+${p.foto1?`<img src="${p.foto1}" alt="${p.nome}">`:(p.imagem?`<img src="${p.imagem}" alt="${p.nome}">`:`<span>${p.emoji}</span>`)}
 </div>
 <div class="product-item-info">
 <h3>${p.nome}</h3>
-<p>R$ ${p.preco.toFixed(2).replace('.',',')} | ${p.categoria} | Estoque: ${p.estoque}</p>
-<p>Tamanhos: ${p.tamanhos.join(', ')}</p>
+<p>R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')} | ${p.categoria} | Estoque: ${p.estoque}</p>
+<p>Tamanhos: ${p.tamanhos?p.tamanhos.join(', '):'-'}</p>
+${p.precoPatrocinio>0?`<p>Patrocínio: +R$ ${parseFloat(p.precoPatrocinio).toFixed(2).replace('.',',')}</p>`:''}
+${p.precoPersonalizacao>0?`<p>Personalização: +R$ ${parseFloat(p.precoPersonalizacao).toFixed(2).replace('.',',')}</p>`:''}
 </div>
 <button class="btn btn-small btn-danger" onclick="window.deletarProduto('${p.id}')">🗑</button>
 </div>
@@ -411,10 +400,7 @@ document.getElementById('tendencia').textContent=tendencia;
 if(graficoVendas)graficoVendas.destroy();
 graficoVendas=new Chart(document.getElementById('graficoVendas'),{
 type:'line',
-data:{
-labels:meses,
-datasets:[{label:'Vendas (R$)',data:vendasPorMes,borderColor:'#25D366',backgroundColor:'rgba(37,211,102,0.1)',tension:0.4,fill:true}]
-},
+data:{labels:meses,datasets:[{label:'Vendas (R$)',data:vendasPorMes,borderColor:'#25D366',backgroundColor:'rgba(37,211,102,0.1)',tension:0.4,fill:true}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#888'}},y:{ticks:{color:'#888'}}}}
 });
 
@@ -428,10 +414,7 @@ const topProdutos=Object.entries(produtosCount).sort((a,b)=>b[1]-a[1]).slice(0,5
 if(graficoProdutos)graficoProdutos.destroy();
 graficoProdutos=new Chart(document.getElementById('graficoProdutos'),{
 type:'bar',
-data:{
-labels:topProdutos.map(p=>p[0].substring(0,15)),
-datasets:[{label:'Vendas',data:topProdutos.map(p=>p[1]),backgroundColor:'rgba(255,153,0,0.7)'}]
-},
+data:{labels:topProdutos.map(p=>p[0].substring(0,15)),datasets:[{label:'Vendas',data:topProdutos.map(p=>p[1]),backgroundColor:'rgba(255,153,0,0.7)'}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}},scales:{x:{ticks:{color:'#888'}},y:{ticks:{color:'#888'}}}}
 });
 
@@ -441,22 +424,17 @@ pedidos.forEach(p=>{pagamentos[p.pagamento]=(pagamentos[p.pagamento]||0)+1;});
 if(graficoPagamento)graficoPagamento.destroy();
 graficoPagamento=new Chart(document.getElementById('graficoPagamento'),{
 type:'doughnut',
-data:{
-labels:Object.keys(pagamentos),
-datasets:[{data:Object.values(pagamentos),backgroundColor:['#25D366','#0099ff','#ff9900']}]
-},
+data:{labels:Object.keys(pagamentos),datasets:[{data:Object.values(pagamentos),backgroundColor:['#25D366','#0099ff','#ff9900']}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}}}
 });
 
 const statusCount={'Confirmado':0,'Em Separação':0,'Enviado':0,'Entregue':0};
 pedidos.forEach(p=>{if(statusCount[p.status]!==undefined)statusCount[p.status]++;});
+
 if(graficoStatus)graficoStatus.destroy();
 graficoStatus=new Chart(document.getElementById('graficoStatus'),{
 type:'doughnut',
-data:{
-labels:Object.keys(statusCount),
-datasets:[{data:Object.values(statusCount),backgroundColor:['#ff9900','#0099ff','#9900ff','#25D366']}]
-},
+data:{labels:Object.keys(statusCount),datasets:[{data:Object.values(statusCount),backgroundColor:['#ff9900','#0099ff','#9900ff','#25D366']}]},
 options:{plugins:{legend:{labels:{color:'#fff'}}}}
 });
 }
@@ -499,22 +477,33 @@ window.adicionarProduto=async function(){
 const nome=document.getElementById('prodNome').value.trim();
 const categoria=document.getElementById('prodCategoria').value;
 const preco=parseFloat(document.getElementById('prodPreco').value);
+const precoPatrocinio=parseFloat(document.getElementById('prodPrecoPatrocinio').value)||0;
+const precoPersonalizacao=parseFloat(document.getElementById('prodPrecoPersonalizacao').value)||0;
 const estoque=parseInt(document.getElementById('prodEstoque').value);
 const emoji=document.getElementById('prodEmoji').value||'⚽';
-const imagem=document.getElementById('prodImagem').value.trim();
+const foto1=document.getElementById('prodFoto1').value.trim();
+const foto2=document.getElementById('prodFoto2').value.trim();
+const foto3=document.getElementById('prodFoto3').value.trim();
 const tamanhosBtns=document.querySelectorAll('.size-btn.active');
 const tamanhos=Array.from(tamanhosBtns).map(b=>b.textContent);
 if(!nome||!preco||!estoque||tamanhos.length===0){
 showAlert('alertMsg','❌ Preencha todos os campos!','error');return;
 }
 try{
-await addDoc(collection(db,'produtos'),{nome,categoria,preco,estoque,emoji,imagem,tamanhos,criadoEm:new Date()});
+await addDoc(collection(db,'produtos'),{
+nome,categoria,preco,precoPatrocinio,precoPersonalizacao,
+estoque,emoji,foto1,foto2,foto3,tamanhos,criadoEm:new Date()
+});
 showAlert('alertMsg','✅ Produto adicionado!','success');
 document.getElementById('prodNome').value='';
 document.getElementById('prodPreco').value='';
+document.getElementById('prodPrecoPatrocinio').value='';
+document.getElementById('prodPrecoPersonalizacao').value='';
 document.getElementById('prodEstoque').value='';
 document.getElementById('prodEmoji').value='⚽';
-document.getElementById('prodImagem').value='';
+document.getElementById('prodFoto1').value='';
+document.getElementById('prodFoto2').value='';
+document.getElementById('prodFoto3').value='';
 document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
 }catch(e){showAlert('alertMsg','❌ Erro ao adicionar!','error');}
 }
@@ -542,9 +531,8 @@ document.getElementById('pedEndereco').value='';
 }
 
 window.atualizarStatus=async function(id,status){
-try{
-await updateDoc(doc(db,'pedidos',id),{status});
-}catch(e){alert('❌ Erro ao atualizar status!');}
+try{await updateDoc(doc(db,'pedidos',id),{status});}
+catch(e){alert('❌ Erro ao atualizar status!');}
 }
 
 window.deletarProduto=async function(id){
